@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "424066461232",
+    "project_id": "parkbenching",
+    "storage_bucket": "parkbenching.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424066461232:android:cf1be7d1ae9f55087307f5",
+        "android_client_info": {
+          "package_name": "com.shaderbytes.parkbenching"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "424066461232-o3dm2hf606n7rvl7cci4dtd9p8d978cq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKmGnNcCM5Jy8ol1QeMsWbICnlPvAgGtA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "424066461232-o3dm2hf606n7rvl7cci4dtd9p8d978cq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
