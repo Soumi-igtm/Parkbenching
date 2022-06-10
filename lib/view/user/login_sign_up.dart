@@ -5,12 +5,13 @@ import 'package:park_benching/resources/auth_methods.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/utils/utils.dart';
 import 'package:park_benching/view/constant/color.dart';
+import 'package:park_benching/view/constant/validators.dart';
 import 'package:park_benching/view/widget/my_button.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 import 'package:park_benching/view/widget/my_text_field.dart';
 
 class LoginSignUp extends StatefulWidget {
-   const LoginSignUp({Key? key}) : super(key: key);
+  const LoginSignUp({Key? key}) : super(key: key);
 
   @override
   State<LoginSignUp> createState() => _LoginSignUpState();
@@ -23,20 +24,17 @@ class _LoginSignUpState extends State<LoginSignUp> {
 
   final _auth = FirebaseAuth.instance;
 
-
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
   }
-  void signUpUser()async{
-    String res = await AuthMethods().signUpUser(
-        email: _emailController.text, password: _passwordController.text
-    );
 
-    if(res == "success"){
+  void signUpUser() async {
+    String res = await AuthMethods().signUpUser(email: _emailController.text, password: _passwordController.text);
 
-    }else{
+    if (res == "success") {
+    } else {
       showSnackBar(res, context);
     }
   }
@@ -52,7 +50,10 @@ class _LoginSignUpState extends State<LoginSignUp> {
         ),
         child: Column(
           children: [
-            Flexible(child: Container(), flex: 2,),
+            Flexible(
+              child: Container(),
+              flex: 2,
+            ),
             MyText(
               paddingTop: 48,
               text: 'Welcome! Do you wish to create an account',
@@ -64,71 +65,61 @@ class _LoginSignUpState extends State<LoginSignUp> {
               paddingTop: 10,
               paddingBottom: Get.height * 0.035,
             ),
-            TextFormField(
-                autofocus: false,
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return ("Please Enter Your Email");
-                  }
-                  // reg expression for email validation
-                  if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-                      .hasMatch(value)) {
-                    return ("Please Enter a valid email");
-                  }
-                  return null;
-                },
-
-                onSaved: (value) {
-                  _emailController.text = value!;
-                },
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.mail),
-                  contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                  hintText: "Email",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                )),
-            TextFormField(
-                autofocus: false,
-                controller: _passwordController,
-                obscureText: true,
-                validator: (value) {
-                  RegExp regex = new RegExp(r'^.{6,}$');
-                  if (value!.isEmpty) {
-                    return ("Password is required for login");
-                  }
-                  if (!regex.hasMatch(value)) {
-                    return ("Enter Valid Password(Min. 6 Character)");
-                  }
-                },
-                onSaved: (value) {
-                  _passwordController.text = value!;
-                },
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.vpn_key),
-                  contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                  hintText: "Password",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                )),
-             InkWell(
-               onTap: signUpUser,
-               child: MyButton(
-                  onPressed: () => Get.toNamed(AppLinks.bottomNavBar),
-                  text: 'Next',
-                ),
-             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: TextFormField(
+                  autofocus: false,
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: emailValidator,
+                  onSaved: (value) {
+                    _emailController.text = value!;
+                  },
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.mail),
+                    contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    hintText: "Email",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: TextFormField(
+                  autofocus: false,
+                  controller: _passwordController,
+                  obscureText: true,
+                  validator: passwordValidator,
+                  onSaved: (value) {
+                    _passwordController.text = value!;
+                  },
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.vpn_key),
+                    contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    hintText: "Password",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  )),
+            ),
+            InkWell(
+              onTap: signUpUser,
+              child: MyButton(
+                onPressed: () => Get.toNamed(AppLinks.bottomNavBar),
+                text: 'Next',
+              ),
+            ),
             const SizedBox(
               height: 5,
             ),
             skipButton(),
-            Flexible(child: Container(), flex: 2,),
+            Flexible(
+              child: Container(),
+              flex: 2,
+            ),
           ],
         ),
       ),
@@ -159,5 +150,4 @@ class _LoginSignUpState extends State<LoginSignUp> {
       ),
     );
   }
-
 }

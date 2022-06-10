@@ -17,7 +17,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.intro,
-      page: () => const Intro(),
+      page: () => Intro(),
     ),
     GetPage(
       name: AppLinks.loginSignUp,
@@ -25,7 +25,7 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.bottomNavBar,
-      page: () => BottomNavBar(),
+      page: () => const BottomNavBar(),
     ),
     GetPage(
       name: AppLinks.reportParkBench,

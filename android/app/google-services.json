@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "424066461232-d98iotes9juvur79nr368i3ejma6ein6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shaderbytes.parkbenching",
+            "certificate_hash": "0931580e280e11d92c57a280cfba32509451d8d2"
+          }
+        },
+        {
           "client_id": "424066461232-o3dm2hf606n7rvl7cci4dtd9p8d978cq.apps.googleusercontent.com",
           "client_type": 3
         }

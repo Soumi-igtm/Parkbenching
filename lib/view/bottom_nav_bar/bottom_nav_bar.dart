@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:park_benching/controller/map_controller/map_controller.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/color.dart';
@@ -8,11 +12,66 @@ import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/drawer/custom_drawer.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
-// ignore: must_be_immutable
-class BottomNavBar extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+class BottomNavBar extends StatefulWidget {
+  const BottomNavBar({Key? key}) : super(key: key);
 
-  BottomNavBar({Key? key}) : super(key: key);
+  @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  final Completer<GoogleMapController> _controller = Completer();
+  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _determinePosition();
+    });
+    super.initState();
+  }
+
+  void _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    // check for location permission
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        //customSnackBarError('Location permissions are denied');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      //customSnackBarError('Location permissions are permanently denied, we cannot request permissions');
+      return;
+    }
+
+    // get current user location
+    Position data = await Geolocator.getCurrentPosition();
+
+    // initialize google map controller
+    final GoogleMapController mapController = await _controller.future;
+
+    // animate map to current user location
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: LatLng(data.latitude, data.longitude), zoom: 19.151926040649414),
+      ),
+    );
+    //fetchAdsData(data.latitude, data.longitude);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +80,14 @@ class BottomNavBar extends StatelessWidget {
       drawer: const CustomDrawer(),
       body: Stack(
         children: [
-          ListView(
-            children: [
-              dummyMap(),
-            ],
+          GoogleMap(
+            mapType: MapType.normal,
+            myLocationEnabled: true,
+            zoomControlsEnabled: true,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
           ),
           Positioned(
             top: 50,
@@ -321,8 +384,7 @@ class MapPinsAndBenchDetails extends StatelessWidget {
                                         vertical: 15,
                                       ),
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
                                         children: [
                                           MyText(
                                             paddingBottom: 8,
@@ -349,8 +411,7 @@ class MapPinsAndBenchDetails extends StatelessWidget {
                                         width: 50,
                                         margin: const EdgeInsets.only(top: 15),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
+                                          borderRadius: BorderRadius.circular(100),
                                           color: kSecondaryColor,
                                         ),
                                         child: Center(
@@ -467,8 +528,7 @@ class MapPinsAndBenchDetails extends StatelessWidget {
                                               Expanded(
                                                 child: CategoryOfRating(
                                                   title: 'Equipment',
-                                                  ratedAnswer:
-                                                      'Several benches',
+                                                  ratedAnswer: 'Several benches',
                                                 ),
                                               ),
                                             ],
@@ -485,18 +545,14 @@ class MapPinsAndBenchDetails extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       MyText(
-                                        text: controller.isDetailsShown == true
-                                            ? 'Less'
-                                            : 'More',
+                                        text: controller.isDetailsShown == true ? 'Less' : 'More',
                                         size: 13,
                                         paddingRight: 5,
                                         weight: FontWeight.w600,
                                         color: kYellowColor,
                                       ),
                                       Image.asset(
-                                        controller.isDetailsShown == true
-                                            ? kArrowUp
-                                            : kArrowDown,
+                                        controller.isDetailsShown == true ? kArrowUp : kArrowDown,
                                         height: 7,
                                       ),
                                     ],
