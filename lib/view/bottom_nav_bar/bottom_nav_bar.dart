@@ -12,6 +12,8 @@ import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/drawer/custom_drawer.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
+import '../../controller/bottomtab_controller/bottomtab_controller.dart';
+
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
@@ -38,7 +40,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   void _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
-    // check for location permission
+    // check for l ocation permission
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
@@ -75,90 +77,94 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _globalKey,
-      drawer: const CustomDrawer(),
-      body: Stack(
-        children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            myLocationEnabled: true,
-            zoomControlsEnabled: true,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-          Positioned(
-            top: 50,
-            left: 15,
-            child: drawerIcon(),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        backgroundColor: kPrimaryColor,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: kTertiaryColor,
-        unselectedItemColor: kTertiaryColor,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-        ),
-        items: [
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () {},
-              index: 0,
-              icon: kRouteIcon,
-              iconSize: 23,
+    return GetBuilder<BottomTabController>(
+        init: BottomTabController(),
+        builder: (controller) {
+          return Scaffold(
+            key: _globalKey,
+            drawer: const CustomDrawer(),
+            body: Stack(
+              children: [
+                GoogleMap(
+                  mapType: MapType.normal,
+                  myLocationEnabled: true,
+                  zoomControlsEnabled: true,
+                  initialCameraPosition: _kGooglePlex,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                ),
+                Positioned(
+                  top: 50,
+                  left: 15,
+                  child: drawerIcon(),
+                ),
+              ],
             ),
-            label: 'Route',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.reportParkBench),
-              index: 1,
-              icon: kReportIcon,
-              iconSize: 25,
+            bottomNavigationBar: BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: kPrimaryColor,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: kTertiaryColor,
+              unselectedItemColor: kTertiaryColor,
+              selectedLabelStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              items: [
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () {},
+                    index: 0,
+                    icon: kRouteIcon,
+                    iconSize: 23,
+                  ),
+                  label: 'Route',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.reportParkBench),
+                    index: 1,
+                    icon: kReportIcon,
+                    iconSize: 25,
+                  ),
+                  label: 'Report',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.sendLocation),
+                    index: 2,
+                    icon: kSendIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Send',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.rateParkBench),
+                    index: 3,
+                    icon: kRateIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Rate',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
+                    index: 4,
+                    icon: kTopRatedIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Top',
+                ),
+              ],
             ),
-            label: 'Report',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.sendLocation),
-              index: 2,
-              icon: kSendIcon,
-              iconSize: 20,
-            ),
-            label: 'Send',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.rateParkBench),
-              index: 3,
-              icon: kRateIcon,
-              iconSize: 20,
-            ),
-            label: 'Rate',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
-              index: 4,
-              icon: kTopRatedIcon,
-              iconSize: 20,
-            ),
-            label: 'Top',
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget dummyMap() {
