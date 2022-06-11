@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/images.dart';
@@ -10,8 +14,35 @@ import 'package:park_benching/view/widget/custom_radio.dart';
 import 'package:park_benching/view/widget/my_button.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
-class RateParkBench extends StatelessWidget {
+class RateParkBench extends StatefulWidget {
   const RateParkBench({Key? key}) : super(key: key);
+
+  @override
+  State<RateParkBench> createState() => _RateParkBenchState();
+}
+
+class _RateParkBenchState extends State<RateParkBench> {
+
+  int _value = 1;
+  int _value2 = 1;
+  int _value3 = 1;
+  int _value4 = 1;
+  int _value5 = 1;
+  File? image;
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+
+      if (image == null) return;
+
+      final imageTemp = File(image.path);
+
+      setState(() => this.image = imageTemp);
+    } on PlatformException catch (e) {
+      print("failed to pick image: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,46 +128,124 @@ class RateParkBench extends StatelessWidget {
                   spacing: 15,
                   runSpacing: 15,
                   children: [
-                    customRadio(
-                      'very clean',
-                      0,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 1,
+                          groupValue: _value,
+                          onChanged: (value) {
+                            setState(() {
+                              _value = value as int;
+                            });
+                          },
+                        ),
+                        Text("very clean"),
+                      ],
                     ),
-                    customRadio(
-                      'clean',
-                      1,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 2,
+                          groupValue: _value,
+                          onChanged: (value) {
+                            setState(() {
+                              _value = value as int;
+                            });
+                          },
+                        ),
+                        Text("clean"),
+                      ],
                     ),
-                    customRadio(
-                      'dirty',
-                      2,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 3,
+                          groupValue: _value,
+                          onChanged: (value) {
+                            setState(() {
+                              _value = value as int;
+                            });
+                          },
+                        ),
+                        Text("dirty"),
+                      ],
                     ),
                   ],
                 ),
-                heading(
-                  'Position',
-                ),
+                heading("Position"),
                 Wrap(
                   spacing: 15,
                   runSpacing: 15,
                   children: [
-                    customRadio(
-                      'park',
-                      0,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 1,
+                          groupValue: _value2,
+                          onChanged: (value) {
+                            setState(() {
+                              _value2 = value as int;
+                            });
+                          },
+                        ),
+                        Text("park")
+                      ],
                     ),
-                    customRadio(
-                      'bus stop',
-                      1,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 2,
+                          groupValue: _value2,
+                          onChanged: (value) {
+                            setState(() {
+                              _value2 = value as int;
+                            });
+                          },
+                        ),
+                        Text("bus stop")
+                      ],
                     ),
-                    customRadio(
-                      'forest path\\track',
-                      2,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 3,
+                          groupValue: _value2,
+                          onChanged: (value) {
+                            setState(() {
+                              _value2 = value as int;
+                            });
+                          },
+                        ),
+                        Text("forest path/track")
+                      ],
                     ),
-                    customRadio(
-                      'pedetrian zone',
-                      3,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 4,
+                          groupValue: _value2,
+                          onChanged: (value) {
+                            setState(() {
+                              _value2 = value as int;
+                            });
+                          },
+                        ),
+                        Text("pedetrian zone")
+                      ],
                     ),
-                    customRadio(
-                      'street',
-                      4,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 5,
+                          groupValue: _value2,
+                          onChanged: (value) {
+                            setState(() {
+                              _value2 = value as int;
+                            });
+                          },
+                        ),
+                        Text("street")
+                      ],
                     ),
                   ],
                 ),
@@ -147,21 +256,61 @@ class RateParkBench extends StatelessWidget {
                   spacing: 15,
                   runSpacing: 15,
                   children: [
-                    customRadio(
-                      'wonderful',
-                      0,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 1,
+                          groupValue: _value3,
+                          onChanged: (value) {
+                            setState(() {
+                              _value3 = value as int;
+                            });
+                          },
+                        ),
+                        Text("wonderful")
+                      ],
                     ),
-                    customRadio(
-                      'changeable',
-                      1,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 2,
+                          groupValue: _value3,
+                          onChanged: (value) {
+                            setState(() {
+                              _value3 = value as int;
+                            });
+                          },
+                        ),
+                        Text("changeable")
+                      ],
                     ),
-                    customRadio(
-                      'relaxed',
-                      2,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 3,
+                          groupValue: _value3,
+                          onChanged: (value) {
+                            setState(() {
+                              _value3 = value as int;
+                            });
+                          },
+                        ),
+                        Text("relaxed")
+                      ],
                     ),
-                    customRadio(
-                      'on the traffic',
-                      3,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 4,
+                          groupValue: _value3,
+                          onChanged: (value) {
+                            setState(() {
+                              _value3 = value as int;
+                            });
+                          },
+                        ),
+                        Text("on the traffic")
+                      ],
                     ),
                   ],
                 ),
@@ -172,17 +321,47 @@ class RateParkBench extends StatelessWidget {
                   spacing: 15,
                   runSpacing: 15,
                   children: [
-                    customRadio(
-                      'car',
-                      0,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 1,
+                          groupValue: _value4,
+                          onChanged: (value) {
+                            setState(() {
+                              _value4 = value as int;
+                            });
+                          },
+                        ),
+                        Text("car")
+                      ],
                     ),
-                    customRadio(
-                      'bicycle',
-                      1,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 2,
+                          groupValue: _value4,
+                          onChanged: (value) {
+                            setState(() {
+                              _value4 = value as int;
+                            });
+                          },
+                        ),
+                        Text("bicycle")
+                      ],
                     ),
-                    customRadio(
-                      'on foot',
-                      2,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 3,
+                          groupValue: _value4,
+                          onChanged: (value) {
+                            setState(() {
+                              _value4 = value as int;
+                            });
+                          },
+                        ),
+                        Text("on foot")
+                      ],
                     ),
                   ],
                 ),
@@ -193,21 +372,61 @@ class RateParkBench extends StatelessWidget {
                   spacing: 15,
                   runSpacing: 15,
                   children: [
-                    customRadio(
-                      'several benches',
-                      0,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 1,
+                          groupValue: _value5,
+                          onChanged: (value) {
+                            setState(() {
+                              _value5 = value as int;
+                            });
+                          },
+                        ),
+                        Text("several benches")
+                      ],
                     ),
-                    customRadio(
-                      'table',
-                      1,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 2,
+                          groupValue: _value5,
+                          onChanged: (value) {
+                            setState(() {
+                              _value5 = value as int;
+                            });
+                          },
+                        ),
+                        Text("table")
+                      ],
                     ),
-                    customRadio(
-                      'canopy',
-                      2,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 3,
+                          groupValue: _value5,
+                          onChanged: (value) {
+                            setState(() {
+                              _value5 = value as int;
+                            });
+                          },
+                        ),
+                        Text("canopy")
+                      ],
                     ),
-                    customRadio(
-                      'garbage can',
-                      2,
+                    Column(
+                      children: [
+                        Radio(
+                          value: 4,
+                          groupValue: _value5,
+                          onChanged: (value) {
+                            setState(() {
+                              _value5 = value as int;
+                            });
+                          },
+                        ),
+                        Text("garbage can")
+                      ],
                     ),
                   ],
                 ),
@@ -246,14 +465,64 @@ class RateParkBench extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                    child: const Text('Submit'),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          content: Text("Report Submitted Successfully"),
+                        ),
+                      );
+                    }),
               ],
             ),
           ),
         ],
       ),
-      bottomNavigationBar: customBottomAppBar(
-        'Submit',
-        () {},
+
+    );
+  }
+
+  Widget takePictureOfBench(VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 80,
+        margin: const EdgeInsets.only(
+          left: 15,
+          right: 15,
+          top: 15,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: kSecondaryColor,
+            width: 1.0,
+          ),
+          color: kSecondaryColor.withOpacity(0.05),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              kCameraIcon,
+              height: 10.33,
+            ),
+            MaterialButton(
+              color: Colors.green[100],
+              child: const Text(
+                "Take picture of park bench",
+                style: TextStyle(color: Colors.black, fontFamily: "Mulish"),
+              ),
+              onPressed: () {
+                pickImage();
+              },
+            ),
+            image != null ? Image.file(image!) : Text("no image selected")
+          ],
+        ),
       ),
     );
   }
@@ -296,42 +565,6 @@ class RateParkBench extends StatelessWidget {
       paddingTop: 35,
     );
   }
-
-  Widget takePictureOfBench(VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 65,
-        margin: const EdgeInsets.only(
-          left: 15,
-          right: 15,
-          top: 15,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: kSecondaryColor,
-            width: 1.0,
-          ),
-          color: kSecondaryColor.withOpacity(0.05),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              kCameraIcon,
-              height: 18.33,
-            ),
-            MyText(
-              paddingTop: 8,
-              text: 'Take picture of park bench',
-              size: 11,
-              weight: FontWeight.w500,
-              fontFamily: 'Mulish',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
+
+
