@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/top_rated_park_benches_controller/top_rated_park_benches_controller.dart';
+import 'package:park_benching/controller/top_rated_park_benches_controller.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/widget/custom_app_bar.dart';

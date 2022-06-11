@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+
+CollectionReference usersCollection = FirebaseFirestore.instance.collection("users");
 
 customToast(String msg) => Fluttertoast.showToast(
     msg: msg,

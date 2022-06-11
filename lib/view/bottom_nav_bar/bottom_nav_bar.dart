@@ -1,170 +1,133 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/controller/map_controller/map_controller.dart';
+import 'package:park_benching/controller/map_controller.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/drawer/custom_drawer.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
-import '../../controller/bottomtab_controller/bottomtab_controller.dart';
+import '../../controller/bottom_nav_controller.dart';
 
-class BottomNavBar extends StatefulWidget {
+class BottomNavBar extends GetView<BottomNavController> {
   const BottomNavBar({Key? key}) : super(key: key);
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
-
-class _BottomNavBarState extends State<BottomNavBar> {
-  final Completer<GoogleMapController> _controller = Completer();
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  @override
-  void initState() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _determinePosition();
-    });
-    super.initState();
-  }
-
-  void _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    // check for l ocation permission
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        //customSnackBarError('Location permissions are denied');
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      //customSnackBarError('Location permissions are permanently denied, we cannot request permissions');
-      return;
-    }
-
-    // get current user location
-    Position data = await Geolocator.getCurrentPosition();
-
-    // initialize google map controller
-    final GoogleMapController mapController = await _controller.future;
-
-    // animate map to current user location
-    mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(data.latitude, data.longitude), zoom: 19.151926040649414),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: controller.globalKey,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: Center(
+          child: GestureDetector(
+            onTap: () => controller.globalKey.currentState!.openDrawer(),
+            child: Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: kWhiteColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: kBlackColor.withOpacity(0.1),
+                    blurRadius: 4,
+                    offset: const Offset(4, 4),
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Image.asset(
+                  kMenuIcon,
+                  height: 13.5,
+                  color: kTertiaryColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      drawer: const CustomDrawer(),
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.normal,
+            myLocationEnabled: true,
+            zoomControlsEnabled: true,
+            initialCameraPosition: controller.googleLocation,
+            onMapCreated: (GoogleMapController googleMapController) {
+              controller.mapController.complete(googleMapController);
+            },
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
+        backgroundColor: kPrimaryColor,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: kTertiaryColor,
+        unselectedItemColor: kTertiaryColor,
+        selectedLabelStyle: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        items: [
+          BottomNavigationBarItem(
+            icon: CustomBottomNavBarItem(
+              onTap: () {},
+              index: 0,
+              icon: kRouteIcon,
+              iconSize: 23,
+            ),
+            label: 'Route',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomBottomNavBarItem(
+              onTap: () => Get.toNamed(AppLinks.reportParkBench),
+              index: 1,
+              icon: kReportIcon,
+              iconSize: 25,
+            ),
+            label: 'Report',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomBottomNavBarItem(
+              onTap: () => Get.toNamed(AppLinks.sendLocation),
+              index: 2,
+              icon: kSendIcon,
+              iconSize: 20,
+            ),
+            label: 'Send',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomBottomNavBarItem(
+              onTap: () => Get.toNamed(AppLinks.rateParkBench),
+              index: 3,
+              icon: kRateIcon,
+              iconSize: 20,
+            ),
+            label: 'Rate',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomBottomNavBarItem(
+              onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
+              index: 4,
+              icon: kTopRatedIcon,
+              iconSize: 20,
+            ),
+            label: 'Top',
+          ),
+        ],
       ),
     );
-    //fetchAdsData(data.latitude, data.longitude);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<BottomTabController>(
-        init: BottomTabController(),
-        builder: (controller) {
-          return Scaffold(
-            key: _globalKey,
-            drawer: const CustomDrawer(),
-            body: Stack(
-              children: [
-                GoogleMap(
-                  mapType: MapType.normal,
-                  myLocationEnabled: true,
-                  zoomControlsEnabled: true,
-                  initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                ),
-                Positioned(
-                  top: 50,
-                  left: 15,
-                  child: drawerIcon(),
-                ),
-              ],
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              elevation: 0,
-              backgroundColor: kPrimaryColor,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: kTertiaryColor,
-              unselectedItemColor: kTertiaryColor,
-              selectedLabelStyle: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-              items: [
-                BottomNavigationBarItem(
-                  icon: CustomBottomNavBarItem(
-                    onTap: () {},
-                    index: 0,
-                    icon: kRouteIcon,
-                    iconSize: 23,
-                  ),
-                  label: 'Route',
-                ),
-                BottomNavigationBarItem(
-                  icon: CustomBottomNavBarItem(
-                    onTap: () => Get.toNamed(AppLinks.reportParkBench),
-                    index: 1,
-                    icon: kReportIcon,
-                    iconSize: 25,
-                  ),
-                  label: 'Report',
-                ),
-                BottomNavigationBarItem(
-                  icon: CustomBottomNavBarItem(
-                    onTap: () => Get.toNamed(AppLinks.sendLocation),
-                    index: 2,
-                    icon: kSendIcon,
-                    iconSize: 20,
-                  ),
-                  label: 'Send',
-                ),
-                BottomNavigationBarItem(
-                  icon: CustomBottomNavBarItem(
-                    onTap: () => Get.toNamed(AppLinks.rateParkBench),
-                    index: 3,
-                    icon: kRateIcon,
-                    iconSize: 20,
-                  ),
-                  label: 'Rate',
-                ),
-                BottomNavigationBarItem(
-                  icon: CustomBottomNavBarItem(
-                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
-                    index: 4,
-                    icon: kTopRatedIcon,
-                    iconSize: 20,
-                  ),
-                  label: 'Top',
-                ),
-              ],
-            ),
-          );
-        });
   }
 
   Widget dummyMap() {
@@ -218,36 +181,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget drawerIcon() {
-    return GestureDetector(
-      onTap: () => _globalKey.currentState!.openDrawer(),
-      child: Container(
-        height: 40,
-        width: 40,
-        margin: const EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: kWhiteColor,
-          boxShadow: [
-            BoxShadow(
-              color: kBlackColor.withOpacity(0.1),
-              blurRadius: 4,
-              offset: const Offset(4, 4),
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: Center(
-          child: Image.asset(
-            kMenuIcon,
-            height: 13.5,
-            color: kTertiaryColor,
-          ),
-        ),
-      ),
     );
   }
 }

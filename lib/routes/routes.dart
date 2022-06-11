@@ -9,23 +9,29 @@ import 'package:park_benching/view/send_location/send_location.dart';
 import 'package:park_benching/view/top_rated_park_benches/top_rated_park_benches.dart';
 import 'package:park_benching/view/user/login_sign_up.dart';
 
+import '../bindings.dart';
+
 class AppRoutes {
   static final routes = [
     GetPage(
       name: AppLinks.splashScreen,
       page: () => const SplashScreen(),
+      binding: SplashBinding(),
     ),
     GetPage(
       name: AppLinks.intro,
-      page: () => Intro(),
+      page: () => const Intro(),
+      binding: IntroBinding(),
     ),
     GetPage(
       name: AppLinks.loginSignUp,
       page: () => const LoginSignUp(),
+      binding: LoginSignupBinding(),
     ),
     GetPage(
       name: AppLinks.bottomNavBar,
       page: () => const BottomNavBar(),
+      binding: BottomNavBinding(),
     ),
     GetPage(
       name: AppLinks.reportParkBench,

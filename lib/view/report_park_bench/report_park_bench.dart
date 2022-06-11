@@ -28,32 +28,27 @@ class _ReportParkBenchState extends State<ReportParkBench> {
   int _value5 = 1;
   File? image;
 
-  Future pickImage() async{
+  Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
-      if(image == null) return;
+      if (image == null) return;
 
       final imageTemp = File(image.path);
 
       setState(() => this.image = imageTemp);
-    } on PlatformException catch (e){
+    } on PlatformException catch (e) {
       print("failed to pick image: $e");
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Report Park Bench',
       ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
+      body: Column(
         children: [
           //dummy Bench Location
           Image.asset(
@@ -64,14 +59,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
           takePictureOfBench(
             () {},
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 15,
-              right: 15,
-              bottom: 20,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
               children: [
                 heading(
                   'Cleanliness',
@@ -83,13 +73,13 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                     Column(
                       children: [
                         Radio(
-                            value: 1,
-                            groupValue: _value,
-                            onChanged: (value){
-                              setState(() {
-                                _value= value as int;
-                              });
-                            },
+                          value: 1,
+                          groupValue: _value,
+                          onChanged: (value) {
+                            setState(() {
+                              _value = value as int;
+                            });
+                          },
                         ),
                         Text("very clean"),
                       ],
@@ -99,9 +89,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 2,
                           groupValue: _value,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value= value as int;
+                              _value = value as int;
                             });
                           },
                         ),
@@ -113,9 +103,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 3,
                           groupValue: _value,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value= value as int;
+                              _value = value as int;
                             });
                           },
                         ),
@@ -136,9 +126,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 1,
                           groupValue: _value2,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value2= value as int;
+                              _value2 = value as int;
                             });
                           },
                         ),
@@ -150,9 +140,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 2,
                           groupValue: _value2,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value2= value as int;
+                              _value2 = value as int;
                             });
                           },
                         ),
@@ -164,9 +154,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 3,
                           groupValue: _value2,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value2= value as int;
+                              _value2 = value as int;
                             });
                           },
                         ),
@@ -178,9 +168,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 4,
                           groupValue: _value2,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value2= value as int;
+                              _value2 = value as int;
                             });
                           },
                         ),
@@ -192,9 +182,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 5,
                           groupValue: _value2,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value2= value as int;
+                              _value2 = value as int;
                             });
                           },
                         ),
@@ -215,9 +205,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 1,
                           groupValue: _value3,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value3= value as int;
+                              _value3 = value as int;
                             });
                           },
                         ),
@@ -229,9 +219,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 2,
                           groupValue: _value3,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value3= value as int;
+                              _value3 = value as int;
                             });
                           },
                         ),
@@ -243,9 +233,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 3,
                           groupValue: _value3,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value3= value as int;
+                              _value3 = value as int;
                             });
                           },
                         ),
@@ -257,9 +247,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 4,
                           groupValue: _value3,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value3= value as int;
+                              _value3 = value as int;
                             });
                           },
                         ),
@@ -280,9 +270,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 1,
                           groupValue: _value4,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value4= value as int;
+                              _value4 = value as int;
                             });
                           },
                         ),
@@ -294,9 +284,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 2,
                           groupValue: _value4,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value4= value as int;
+                              _value4 = value as int;
                             });
                           },
                         ),
@@ -308,9 +298,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 3,
                           groupValue: _value4,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value4= value as int;
+                              _value4 = value as int;
                             });
                           },
                         ),
@@ -331,9 +321,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 1,
                           groupValue: _value5,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value5= value as int;
+                              _value5 = value as int;
                             });
                           },
                         ),
@@ -345,9 +335,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 2,
                           groupValue: _value5,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value5= value as int;
+                              _value5 = value as int;
                             });
                           },
                         ),
@@ -359,9 +349,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 3,
                           groupValue: _value5,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value5= value as int;
+                              _value5 = value as int;
                             });
                           },
                         ),
@@ -373,9 +363,9 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                         Radio(
                           value: 4,
                           groupValue: _value5,
-                          onChanged: (value){
+                          onChanged: (value) {
                             setState(() {
-                              _value5= value as int;
+                              _value5 = value as int;
                             });
                           },
                         ),
@@ -461,33 +451,32 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                       ),
                     ),
                   ],
-                )
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                    child: const Text('Submit'),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const AlertDialog(
+                          content: Text("Report Submitted Successfully"),
+                        ),
+                      );
+                    }),
               ],
             ),
           ),
         ],
-          prototypeItem:
-          ElevatedButton(
-              child: Text('Submit'),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) =>
-                      AlertDialog(
-                        content: Text("Report Submitted Successfully"),
-                      ),
+      ),
 
-                );
-              }
-              ),
-                ),
-                );
+    );
   }
+
   Widget takePictureOfBench(VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 65,
+        height: 80,
         margin: const EdgeInsets.only(
           left: 15,
           right: 15,
@@ -510,17 +499,15 @@ class _ReportParkBenchState extends State<ReportParkBench> {
             ),
             MaterialButton(
               color: Colors.green[100],
-              child: const Text("Take picture of park bench",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: "Mulish"
-                ),
+              child: const Text(
+                "Take picture of park bench",
+                style: TextStyle(color: Colors.black, fontFamily: "Mulish"),
               ),
               onPressed: () {
                 pickImage();
               },
             ),
-            image!=null ? Image.file(image!): Text("no image selected")
+            image != null ? Image.file(image!) : Text("no image selected")
           ],
         ),
       ),
@@ -565,6 +552,4 @@ class _ReportParkBenchState extends State<ReportParkBench> {
       paddingTop: 35,
     );
   }
-
-
 }

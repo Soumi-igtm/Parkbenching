@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:park_benching/routes/routes.dart';
+import 'package:park_benching/controller/intro_controller.dart';
 import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/widget/custom_bottom_app_bar.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
-class Intro extends StatelessWidget {
-  Intro({Key? key}) : super(key: key);
-  final box = GetStorage();
+class Intro extends GetView<IntroController> {
+  const Intro({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,10 +65,7 @@ class Intro extends StatelessWidget {
       ),
       bottomNavigationBar: customBottomAppBar(
         'Next',
-        () {
-          box.write("introread", true);
-          Get.toNamed(AppLinks.loginSignUp);
-        },
+        () => controller.next(),
       ),
     );
   }

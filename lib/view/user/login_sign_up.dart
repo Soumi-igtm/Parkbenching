@@ -1,31 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/resources/auth_methods.dart';
+import 'package:park_benching/controller/login_signup_controller.dart';
 import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/utils/utils.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/validators.dart';
 import 'package:park_benching/view/widget/my_button.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
-class LoginSignUp extends StatefulWidget {
+
+class LoginSignUp extends GetView<LoginSignupController> {
   const LoginSignUp({Key? key}) : super(key: key);
 
-  @override
-  State<LoginSignUp> createState() => _LoginSignUpState();
-}
 
-class _LoginSignUpState extends State<LoginSignUp> {
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(text: "pradeepta@shaderbytes.com"),
-      _passwordController = TextEditingController(text: "1234abcd");
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +20,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
         child: Form(
-          key: formKey,
+          key: controller.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
@@ -54,11 +40,11 @@ class _LoginSignUpState extends State<LoginSignUp> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: TextFormField(
                     autofocus: false,
-                    controller: _emailController,
+                    controller: controller.emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: emailValidator,
                     onSaved: (value) {
-                      _emailController.text = value!;
+                      controller.emailController.text = value!;
                     },
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -74,11 +60,11 @@ class _LoginSignUpState extends State<LoginSignUp> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: TextFormField(
                   autofocus: false,
-                  controller: _passwordController,
+                  controller: controller.passwordController,
                   obscureText: true,
                   validator: passwordValidator,
                   onSaved: (value) {
-                    _passwordController.text = value!;
+                    controller.passwordController.text = value!;
                   },
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
@@ -93,10 +79,7 @@ class _LoginSignUpState extends State<LoginSignUp> {
               ),
               MyButton(
                   onPressed: () async {
-                    if (!formKey.currentState!.validate()) {
-                      return;
-                    }
-                    AuthMethods().loginUser(email: _emailController.text, password: _passwordController.text);
+                    controller.checkLogin();
                   },
                   text: 'Next'),
               const SizedBox(height: 5),

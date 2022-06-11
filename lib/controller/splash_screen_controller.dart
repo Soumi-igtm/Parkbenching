@@ -22,8 +22,9 @@ class SplashScreenController extends GetxController {
         if (box.read("introread") ?? false) {
           if (uid.isNotEmpty) {
             Get.offAllNamed(AppLinks.bottomNavBar, parameters: {"uid": uid});
+          } else {
+            Get.offAllNamed(AppLinks.loginSignUp);
           }
-          Get.offAllNamed(AppLinks.loginSignUp);
         } else {
           Get.offAllNamed(AppLinks.intro);
         }

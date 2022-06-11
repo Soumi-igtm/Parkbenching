@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/common.dart';
 
 class AuthMethods {
+  static AuthMethods instance = AuthMethods();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<String> checkAuth() async {
     return _auth.currentUser == null ? "" : _auth.currentUser!.uid;
@@ -41,7 +41,9 @@ class AuthMethods {
   }) async {
     try {
       await _auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
-        Get.offAllNamed(AppLinks.bottomNavBar, parameters: {"uid": value.user!.uid});
+        String uid = value.user!.uid;
+        usersCollection.doc(uid).set({"name": "", "email": email});
+        Get.offAllNamed(AppLinks.bottomNavBar, parameters: {"uid": uid});
       });
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
