@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/resources/database.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/common.dart';
 
@@ -44,11 +43,9 @@ class AuthMethods {
       await _auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
         String uid = value.user!.uid;
         usersCollection.doc(uid).set({"name": "", "email": email});
+        benchesCollection.where("active", isEqualTo: true).get();
         Get.offAllNamed(AppLinks.bottomNavBar, parameters: {"uid": uid});
       });
-      var users;
-      await DatabaseServices(uid: users.uid).updateUserData("", "new mail");
-      
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "email-already-in-use":

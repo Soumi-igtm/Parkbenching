@@ -225,7 +225,7 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                             });
                           },
                         ),
-                        Text("changeable")
+                        const Text("changeable")
                       ],
                     ),
                     Column(
@@ -369,7 +369,7 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                             });
                           },
                         ),
-                        Text("garbage can")
+                        const Text("garbage can")
                       ],
                     ),
                   ],
