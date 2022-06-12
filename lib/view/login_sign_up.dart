@@ -23,8 +23,8 @@ class LoginSignUp extends GetView<LoginSignupController> {
           key: controller.formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Flexible(child: Container(), flex: 2),
               MyText(
                 paddingTop: 48,
                 text: 'Welcome! Do you wish to create an account',
