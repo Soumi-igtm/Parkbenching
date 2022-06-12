@@ -1,474 +1,425 @@
 import 'dart:io';
 
+import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/widget/custom_app_bar.dart';
-import 'package:park_benching/view/widget/custom_bottom_app_bar.dart';
-
 import 'package:park_benching/view/widget/my_text.dart';
 
-class ReportParkBench extends StatefulWidget {
+import '../../controller/report_park_bench_controller.dart';
+import '../constant/validators.dart';
+
+
+
+class ReportParkBench extends GetView<ReportParkBenchController> {
   const ReportParkBench({Key? key}) : super(key: key);
-
-  @override
-  State<ReportParkBench> createState() => _ReportParkBenchState();
-}
-
-class _ReportParkBenchState extends State<ReportParkBench> {
-  int _value = 1;
-  int _value2 = 1;
-  int _value3 = 1;
-  int _value4 = 1;
-  int _value5 = 1;
-  File? image;
-
-  Future pickImage() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
-
-      if (image == null) return;
-
-      final imageTemp = File(image.path);
-
-      setState(() => this.image = imageTemp);
-    } on PlatformException catch (e) {
-      print("failed to pick image: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Report Park Bench',
-      ),
+      resizeToAvoidBottomInset: false,
+      appBar: CustomAppBar(title: 'Report Park Bench'),
       body: Column(
         children: [
           //dummy Bench Location
-          Image.asset(
-            'assets/images/map_2.png',
-            height: 168,
-            fit: BoxFit.cover,
-          ),
-          takePictureOfBench(
-            () {},
+          // Image.asset(
+          //   'assets/images/map_2.png',
+          //   height: 168,
+          //   fit: BoxFit.cover,
+          // ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15),
+            height: context.height / 3.5,
+            child: Stack(
+              alignment: AlignmentDirectional.center,
+              children: [
+                GoogleMap(
+                  mapType: MapType.normal,
+                  myLocationEnabled: true,
+                  zoomControlsEnabled: true,
+                  initialCameraPosition: controller.googleLocation,
+                  onMapCreated: (GoogleMapController googleMapController) {
+                    controller.mapController.complete(googleMapController);
+                  },
+                  onCameraMove: (CameraPosition position) {
+                    controller.currentPosition = position.target;
+                  },
+                ),
+                const Icon(Icons.location_on, size: 30)
+              ],
+            ),
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
               children: [
-                heading(
-                  'Cleanliness',
-                ),
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Column(
-                      children: [
-                        Radio(
-                          value: 1,
-                          groupValue: _value,
-                          onChanged: (value) {
-                            setState(() {
-                              _value = value as int;
-                            });
-                          },
-                        ),
-                        Text("very clean"),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 2,
-                          groupValue: _value,
-                          onChanged: (value) {
-                            setState(() {
-                              _value = value as int;
-                            });
-                          },
-                        ),
-                        Text("clean"),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 3,
-                          groupValue: _value,
-                          onChanged: (value) {
-                            setState(() {
-                              _value = value as int;
-                            });
-                          },
-                        ),
-                        Text("dirty"),
-                      ],
-                    ),
-                  ],
-                ),
-                heading(
-                  'Position',
-                ),
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Column(
-                      children: [
-                        Radio(
-                          value: 1,
-                          groupValue: _value2,
-                          onChanged: (value) {
-                            setState(() {
-                              _value2 = value as int;
-                            });
-                          },
-                        ),
-                        Text("park")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 2,
-                          groupValue: _value2,
-                          onChanged: (value) {
-                            setState(() {
-                              _value2 = value as int;
-                            });
-                          },
-                        ),
-                        Text("bus stop")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 3,
-                          groupValue: _value2,
-                          onChanged: (value) {
-                            setState(() {
-                              _value2 = value as int;
-                            });
-                          },
-                        ),
-                        Text("forest path/track")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 4,
-                          groupValue: _value2,
-                          onChanged: (value) {
-                            setState(() {
-                              _value2 = value as int;
-                            });
-                          },
-                        ),
-                        Text("pedetrian zone")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 5,
-                          groupValue: _value2,
-                          onChanged: (value) {
-                            setState(() {
-                              _value2 = value as int;
-                            });
-                          },
-                        ),
-                        Text("street")
-                      ],
-                    ),
-                  ],
-                ),
-                heading(
-                  'View',
-                ),
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Column(
-                      children: [
-                        Radio(
-                          value: 1,
-                          groupValue: _value3,
-                          onChanged: (value) {
-                            setState(() {
-                              _value3 = value as int;
-                            });
-                          },
-                        ),
-                        Text("wonderful")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 2,
-                          groupValue: _value3,
-                          onChanged: (value) {
-                            setState(() {
-                              _value3 = value as int;
-                            });
-                          },
-                        ),
-                        const Text("changeable")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 3,
-                          groupValue: _value3,
-                          onChanged: (value) {
-                            setState(() {
-                              _value3 = value as int;
-                            });
-                          },
-                        ),
-                        Text("relaxed")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 4,
-                          groupValue: _value3,
-                          onChanged: (value) {
-                            setState(() {
-                              _value3 = value as int;
-                            });
-                          },
-                        ),
-                        Text("on the traffic")
-                      ],
-                    ),
-                  ],
-                ),
-                heading(
-                  'Reachability',
-                ),
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Column(
-                      children: [
-                        Radio(
-                          value: 1,
-                          groupValue: _value4,
-                          onChanged: (value) {
-                            setState(() {
-                              _value4 = value as int;
-                            });
-                          },
-                        ),
-                        Text("car")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 2,
-                          groupValue: _value4,
-                          onChanged: (value) {
-                            setState(() {
-                              _value4 = value as int;
-                            });
-                          },
-                        ),
-                        Text("bicycle")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 3,
-                          groupValue: _value4,
-                          onChanged: (value) {
-                            setState(() {
-                              _value4 = value as int;
-                            });
-                          },
-                        ),
-                        Text("on foot")
-                      ],
-                    ),
-                  ],
-                ),
-                heading(
-                  'Equipment',
-                ),
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    Column(
-                      children: [
-                        Radio(
-                          value: 1,
-                          groupValue: _value5,
-                          onChanged: (value) {
-                            setState(() {
-                              _value5 = value as int;
-                            });
-                          },
-                        ),
-                        Text("several benches")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 2,
-                          groupValue: _value5,
-                          onChanged: (value) {
-                            setState(() {
-                              _value5 = value as int;
-                            });
-                          },
-                        ),
-                        Text("table")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 3,
-                          groupValue: _value5,
-                          onChanged: (value) {
-                            setState(() {
-                              _value5 = value as int;
-                            });
-                          },
-                        ),
-                        Text("canopy")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Radio(
-                          value: 4,
-                          groupValue: _value5,
-                          onChanged: (value) {
-                            setState(() {
-                              _value5 = value as int;
-                            });
-                          },
-                        ),
-                        const Text("garbage can")
-                      ],
-                    ),
-                  ],
+                Form(
+                  key: controller.formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
+                    child: TextFormField(
+                        autofocus: false,
+                        controller: controller.benchNameController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: benchValidator,
+                        onSaved: (value) {
+                          controller.benchNameController.text = value!;
+                        },
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.event_seat),
+                          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                          hintText: "Bench name",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        )),
+                  ),
                 ),
                 Row(
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          heading('Rating'),
-                          RatingBar.builder(
-                            initialRating: 0,
-                            minRating: 0,
-                            itemSize: 16.20,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            glow: false,
-                            itemPadding: const EdgeInsets.symmetric(
-                              horizontal: 2.0,
-                            ),
-                            unratedColor: const Color(0xffCCCFD9),
-                            itemBuilder: (context, _) => Image.asset(
-                              kRatingStar,
-                              height: 16.20,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
+                      child: Container(
+                        height: 45,
+                        margin: const EdgeInsets.fromLTRB(15, 10, 7.5, 0),
+                        decoration: BoxDecoration(
+                          color: kSecondaryColor.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: kSecondaryColor,
+                            width: 1,
                           ),
-                        ],
+                        ),
+                        child: InkWell(
+                          onTap: () => controller.pickImage(fromGallery: true),
+                          borderRadius: BorderRadius.circular(5),
+                          splashColor: kSecondaryColor.withOpacity(0.05),
+                          highlightColor: kSecondaryColor.withOpacity(0.05),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.image_search),
+                              MyText(
+                                paddingLeft: 5,
+                                text: 'From gallery',
+                                size: 13,
+                                fontFamily: 'Mulish',
+                                weight: FontWeight.w700,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     Expanded(
-                      child: reportBrokenBench(),
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        heading('Message'),
-                        MyText(
-                          paddingTop: 10,
-                          paddingLeft: 5,
-                          text: '(optional)',
-                          size: 13,
-                          weight: FontWeight.w500,
-                        ),
-                      ],
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: TextFormField(
-                        style: const TextStyle(
-                          color: kTertiaryColor,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Mulish',
-                        ),
-                        maxLines: 5,
-                        decoration: const InputDecoration(
-                          hintText: 'Write your message',
-                          filled: true,
-                          fillColor: kWhiteColor,
-                          hintStyle: TextStyle(
-                            color: kTertiaryColor,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Mulish',
+                      child: Container(
+                        height: 45,
+                        margin: const EdgeInsets.fromLTRB(7.5, 10, 15, 0),
+                        decoration: BoxDecoration(
+                          color: kSecondaryColor.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: kSecondaryColor,
+                            width: 1,
                           ),
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
+                        ),
+                        child: InkWell(
+                          onTap: () => controller.pickImage(),
+                          borderRadius: BorderRadius.circular(5),
+                          splashColor: kSecondaryColor.withOpacity(0.05),
+                          highlightColor: kSecondaryColor.withOpacity(0.05),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.camera_alt),
+                              MyText(
+                                paddingLeft: 5,
+                                text: 'From camera',
+                                size: 13,
+                                fontFamily: 'Mulish',
+                                weight: FontWeight.w700,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 10),
-                ElevatedButton(
-                    child: const Text('Submit'),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const AlertDialog(
-                          content: Text("Report Submitted Successfully"),
+                Obx(
+                      () => controller.photos.isNotEmpty
+                      ? SizedBox(
+                    height: 90,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: controller.photos.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            controller.photos.removeAt(index);
+                          },
+                          child: Stack(
+                            alignment: AlignmentDirectional.topEnd,
+                            children: [
+                              Image.file(
+                                File(controller.photos[index]),
+                                height: 80,
+                                fit: BoxFit.cover,
+                              ),
+                              Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: const ShapeDecoration(shape: CircleBorder(), color: kWhiteColor),
+                                child: const Icon(Icons.close, size: 18, color: Colors.red),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) => const SizedBox(width: 10),
+                    ),
+                  )
+                      : const SizedBox(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    right: 15,
+                    bottom: 20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      heading('Cleanliness'),
+                      CustomRadioButton(
+                        elevation: 0,
+                        absoluteZeroSpacing: false,
+                        unSelectedColor: kPrimaryColor,
+                        buttonLables: const [
+                          'Very clean',
+                          'Clean',
+                          'Dirty',
+                        ],
+                        buttonValues: const [
+                          'Very clean',
+                          'Clean',
+                          'Dirty',
+                        ],
+                        buttonTextStyle: const ButtonTextStyle(
+                          selectedColor: Colors.white,
+                          unSelectedColor: Colors.black,
+                          textStyle: TextStyle(fontSize: 13, fontFamily: 'Mulish'),
                         ),
-                      );
-                    }),
+                        radioButtonValue: (value) {
+                          controller.cleanliness = value as String;
+                        },
+                        spacing: 5,
+                        defaultSelected: "Clean",
+                        enableShape: true,
+                        enableButtonWrap: false,
+                        scrollController: ScrollController(),
+                        padding: 10,
+                        selectedColor: kTertiaryColor,
+                        unSelectedBorderColor: kTertiaryColor,
+                      ),
+                      heading("Position"),
+                      CustomRadioButton(
+                        elevation: 0,
+                        absoluteZeroSpacing: false,
+                        unSelectedColor: kPrimaryColor,
+                        buttonLables: const [
+                          'Park',
+                          'Bus stop',
+                          'Forest path/ Track',
+                          'Pedestrian zone',
+                          'Street',
+                        ],
+                        buttonValues: const [
+                          'Park',
+                          'Bus stop',
+                          'Forest path/ Track',
+                          'Pedestrian zone',
+                          'Street',
+                        ],
+                        buttonTextStyle: const ButtonTextStyle(
+                          selectedColor: Colors.white,
+                          unSelectedColor: Colors.black,
+                          textStyle: TextStyle(fontSize: 13, fontFamily: 'Mulish'),
+                        ),
+                        radioButtonValue: (value) {
+                          controller.position = value as String;
+                        },
+                        spacing: 5,
+                        defaultSelected: "Park",
+                        enableShape: true,
+                        enableButtonWrap: false,
+                        scrollController: ScrollController(),
+                        width: 145,
+                        padding: 10,
+                        selectedColor: kTertiaryColor,
+                        unSelectedBorderColor: kTertiaryColor,
+                      ),
+                      heading('View'),
+                      CustomRadioButton(
+                        elevation: 0,
+                        absoluteZeroSpacing: false,
+                        unSelectedColor: kPrimaryColor,
+                        buttonLables: const [
+                          'Wonderful',
+                          'Changeable',
+                          'Relaxed',
+                          'On the traffic',
+                        ],
+                        buttonValues: const [
+                          'Wonderful',
+                          'Changeable',
+                          'Relaxed',
+                          'On the traffic',
+                        ],
+                        buttonTextStyle: const ButtonTextStyle(
+                          selectedColor: Colors.white,
+                          unSelectedColor: Colors.black,
+                          textStyle: TextStyle(fontSize: 13, fontFamily: 'Mulish'),
+                        ),
+                        radioButtonValue: (value) {
+                          controller.view = value as String;
+                        },
+                        spacing: 5,
+                        defaultSelected: "Wonderful",
+                        enableShape: true,
+                        enableButtonWrap: false,
+                        scrollController: ScrollController(),
+                        width: 120,
+                        padding: 10,
+                        selectedColor: kTertiaryColor,
+                        unSelectedBorderColor: kTertiaryColor,
+                      ),
+                      heading('Reachability'),
+                      CustomCheckBoxGroup(
+                        buttonTextStyle: const ButtonTextStyle(
+                          selectedColor: Colors.white,
+                          unSelectedColor: Colors.black,
+                          textStyle: TextStyle(fontSize: 13, fontFamily: 'Mulish'),
+                        ),
+                        unSelectedColor: kPrimaryColor,
+                        buttonLables: const [
+                          "Car",
+                          "Bicycle",
+                          "On foot",
+                        ],
+                        buttonValuesList: const [
+                          "Car",
+                          "Bicycle",
+                          "On foot",
+                        ],
+                        checkBoxButtonValues: (values) {
+                          controller.reachability = values;
+                        },
+                        spacing: 5,
+                        defaultSelected: const ["Bicycle"],
+                        enableButtonWrap: false,
+                        scrollController: ScrollController(),
+                        enableShape: true,
+                        width: 100,
+                        absoluteZeroSpacing: false,
+                        selectedColor: kTertiaryColor,
+                        unSelectedBorderColor: kTertiaryColor,
+                        padding: 10,
+                      ),
+                      heading('Equipment'),
+                      CustomCheckBoxGroup(
+                        buttonTextStyle: const ButtonTextStyle(
+                          selectedColor: Colors.white,
+                          unSelectedColor: Colors.black,
+                          textStyle: TextStyle(fontSize: 13, fontFamily: 'Mulish'),
+                        ),
+                        unSelectedColor: kPrimaryColor,
+                        buttonLables: const [
+                          "Several benches",
+                          "Table",
+                          "Canopy",
+                          "Garbage can",
+                        ],
+                        buttonValuesList: const [
+                          "Several benches",
+                          "Table",
+                          "Canopy",
+                          "Garbage can",
+                        ],
+                        checkBoxButtonValues: (values) {
+                          controller.equipment = values;
+                        },
+                        spacing: 5,
+                        defaultSelected: const ["Several benches"],
+                        enableButtonWrap: false,
+                        scrollController: ScrollController(),
+                        enableShape: true,
+                        width: 150,
+                        absoluteZeroSpacing: false,
+                        selectedColor: kTertiaryColor,
+                        unSelectedBorderColor: kTertiaryColor,
+                        padding: 10,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                heading('Rating'),
+                                RatingBar.builder(
+                                  initialRating: 0,
+                                  minRating: 0,
+                                  itemSize: 16.20,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: true,
+                                  itemCount: 5,
+                                  glow: false,
+                                  itemPadding: const EdgeInsets.symmetric(
+                                    horizontal: 2.0,
+                                  ),
+                                  unratedColor: const Color(0xffCCCFD9),
+                                  itemBuilder: (context, _) => Image.asset(
+                                    kRatingStar,
+                                    height: 16.20,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: reportBrokenBench(),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        child: MyText(text: 'Submit', color: kWhiteColor, weight: FontWeight.bold, paddingTop: 15, paddingBottom: 15),
+                        style: ElevatedButton.styleFrom(primary: kSecondaryColor),
+                        onPressed: () {
+                          controller.submitRating(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
         ],
       ),
-
     );
   }
 
@@ -504,10 +455,10 @@ class _ReportParkBenchState extends State<ReportParkBench> {
                 style: TextStyle(color: Colors.black, fontFamily: "Mulish"),
               ),
               onPressed: () {
-                pickImage();
+                // pickImage();
               },
             ),
-            image != null ? Image.file(image!) : Text("no image selected")
+            //image != null ? Image.file(image!) : Text("no image selected")
           ],
         ),
       ),

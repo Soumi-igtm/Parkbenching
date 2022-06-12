@@ -4,6 +4,7 @@ import 'package:park_benching/controller/rate_park_bench_controller.dart';
 import 'controller/bottom_nav_controller.dart';
 import 'controller/intro_controller.dart';
 import 'controller/login_signup_controller.dart';
+import 'controller/report_park_bench_controller.dart';
 import 'controller/splash_screen_controller.dart';
 
 class SplashBinding extends Bindings {
@@ -39,4 +40,12 @@ class RateParkBenchBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<RateParkBenchController>(() => RateParkBenchController());
   }
+}
+
+class ReportParkBenchBinding extends Bindings{
+  @override
+  void dependencies() {
+    Get.lazyPut<ReportParkBenchController>(() => ReportParkBenchController());
+  }
+
 }

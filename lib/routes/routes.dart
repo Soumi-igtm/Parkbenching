@@ -37,6 +37,7 @@ class AppRoutes {
     GetPage(
       name: AppLinks.reportParkBench,
       page: () => const ReportParkBench(),
+      binding: ReportParkBenchBinding(),
     ),
     GetPage(
       name: AppLinks.report,
