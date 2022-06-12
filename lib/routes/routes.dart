@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:park_benching/view/bottom_nav_bar.dart';
+
 import 'package:park_benching/view/launch/intro.dart';
 import 'package:park_benching/view/launch/splash_screen.dart';
 import 'package:park_benching/view/rate_park_bench.dart';
@@ -10,6 +10,7 @@ import 'package:park_benching/view/top_rated_park_benches/top_rated_park_benches
 import 'package:park_benching/view/login_sign_up.dart';
 
 import '../bindings.dart';
+import '../view/bottom_nav_bar.dart';
 
 class AppRoutes {
   static final routes = [
