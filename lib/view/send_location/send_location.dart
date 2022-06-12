@@ -57,7 +57,7 @@ class SendLocation extends GetView<SendLocationController> {
           ElevatedButton(
               child: Text("Share the location"),
               onPressed: () async{
-                final Url = '';
+                final Url = 'https://www.google.com/maps/place/Siraj+Garden/@22.7210037,88.4839073,17z/data=!4m9!1m2!2m1!1sshiraj+uddan!3m5!1s0x39f8a3b334cb6649:0xf72daa97efc19';
                 if(_textEditingController.value.text.isNotEmpty){
                   await Share.share('${_textEditingController.text} ${Url}');
                 }
