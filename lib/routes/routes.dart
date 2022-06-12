@@ -50,7 +50,9 @@ class AppRoutes {
     ),
     GetPage(
       name: AppLinks.sendLocation,
-      page: () => const SendLocation(),
+      page: () =>  SendLocation(),
+      binding: SendLocationBinding(),
+
     ),
     GetPage(
       name: AppLinks.topRatedParkBenches,

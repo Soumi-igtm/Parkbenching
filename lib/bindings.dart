@@ -5,6 +5,7 @@ import 'controller/bottom_nav_controller.dart';
 import 'controller/intro_controller.dart';
 import 'controller/login_signup_controller.dart';
 import 'controller/report_park_bench_controller.dart';
+import 'controller/send_location_controller.dart';
 import 'controller/splash_screen_controller.dart';
 
 class SplashBinding extends Bindings {
@@ -49,3 +50,11 @@ class ReportParkBenchBinding extends Bindings{
   }
 
 }
+
+class SendLocationBinding extends Bindings{
+  @override
+  void dependencies() {
+    Get.lazyPut<SendLocationController>(() => SendLocationController());
+  }
+}
+

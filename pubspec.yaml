@@ -31,6 +31,9 @@ dependencies:
   fluttertoast: ^8.0.9
   geoflutterfire: ^3.0.3
   custom_radio_grouped_button:
+  share_plus: ^4.0.7
+
+
 
 dev_dependencies:
   flutter_test:
