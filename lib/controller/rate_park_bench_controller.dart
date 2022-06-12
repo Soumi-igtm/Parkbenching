@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -20,6 +21,7 @@ class RateParkBenchController extends GetxController {
   final formKey = GlobalKey<FormState>();
   final Completer<GoogleMapController> mapController = Completer();
   final box = GetStorage();
+  final geo = Geoflutterfire();
 
   final CameraPosition googleLocation = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -56,6 +58,7 @@ class RateParkBenchController extends GetxController {
       return;
     }
     customToast("Please wait...");
+    GeoFirePoint myLocation = geo.point(latitude: currentPosition.latitude, longitude: currentPosition.longitude);
     await benchesCollection.add({
       "benchName": benchNameController.text,
       "uid": uid!,
@@ -66,7 +69,7 @@ class RateParkBenchController extends GetxController {
       "reachability": reachability,
       "equipment": equipment,
       "images": [],
-      "location": GeoPoint(currentPosition.latitude, currentPosition.longitude),
+      "location": myLocation.data
     }).then((value) async {
       List photosUrl = [];
       if (photos.isNotEmpty) {
