@@ -8,6 +8,16 @@ String? nameValidator(String? value) {
   return null;
 }
 
+String? benchValidator(String? value) {
+  if (value!.isEmpty) {
+    return "Please enter a bench name";
+  }
+  if (value.length < 4) {
+    return "Name is too short";
+  }
+  return null;
+}
+
 
 String? emailValidator(String? value) {
   String pattern =

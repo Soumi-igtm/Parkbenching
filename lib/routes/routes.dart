@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
-import 'package:park_benching/view/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:park_benching/view/bottom_nav_bar.dart';
 import 'package:park_benching/view/launch/intro.dart';
 import 'package:park_benching/view/launch/splash_screen.dart';
-import 'package:park_benching/view/rate_park_bench/rate_park_bench.dart';
+import 'package:park_benching/view/rate_park_bench.dart';
 import 'package:park_benching/view/report_park_bench/report/report.dart';
 import 'package:park_benching/view/report_park_bench/report_park_bench.dart';
 import 'package:park_benching/view/send_location/send_location.dart';
 import 'package:park_benching/view/top_rated_park_benches/top_rated_park_benches.dart';
-import 'package:park_benching/view/user/login_sign_up.dart';
+import 'package:park_benching/view/login_sign_up.dart';
 
 import '../bindings.dart';
 
@@ -44,6 +44,7 @@ class AppRoutes {
     GetPage(
       name: AppLinks.rateParkBench,
       page: () => const RateParkBench(),
+      binding: RateParkBenchBinding(),
     ),
     GetPage(
       name: AppLinks.sendLocation,

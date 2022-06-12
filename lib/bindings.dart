@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:park_benching/controller/rate_park_bench_controller.dart';
 
 import 'controller/bottom_nav_controller.dart';
 import 'controller/intro_controller.dart';
@@ -30,5 +31,12 @@ class BottomNavBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<BottomNavController>(() => BottomNavController());
+  }
+}
+
+class RateParkBenchBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<RateParkBenchController>(() => RateParkBenchController());
   }
 }

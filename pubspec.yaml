@@ -18,6 +18,8 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.0.3
   firebase_auth: ^3.3.19
+  firebase_storage:
+  firebase_analytics:
   firebase_core: ^1.17.1
   firebase_app_check: ^0.0.6+13
   cloud_firestore: ^3.1.17
@@ -27,6 +29,8 @@ dependencies:
   geocoding: ^2.0.4
   image_picker: ^0.8.5+3
   fluttertoast: ^8.0.9
+  geoflutterfire: ^3.0.3
+  custom_radio_grouped_button: ^2.1.2+1
 
 dev_dependencies:
   flutter_test:

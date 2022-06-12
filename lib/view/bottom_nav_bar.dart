@@ -9,123 +9,125 @@ import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/drawer/custom_drawer.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
-import '../../controller/bottom_nav_controller.dart';
+import '../controller/bottom_nav_controller.dart';
 
 class BottomNavBar extends GetView<BottomNavController> {
   const BottomNavBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: controller.globalKey,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        leading: Center(
-          child: GestureDetector(
-            onTap: () => controller.globalKey.currentState!.openDrawer(),
-            child: Container(
-              height: 40,
-              width: 40,
-              margin: const EdgeInsets.only(bottom: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: kWhiteColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: kBlackColor.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(4, 4),
-                    spreadRadius: 2,
+    return SafeArea(
+      child: Scaffold(
+        key: controller.globalKey,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: Center(
+            child: GestureDetector(
+              onTap: () => controller.globalKey.currentState!.openDrawer(),
+              child: Container(
+                height: 40,
+                width: 40,
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: ShapeDecoration(
+                  shape: const CircleBorder(),
+                  color: kWhiteColor,
+                  shadows: [
+                    BoxShadow(
+                      color: kBlackColor.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(4, 4),
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Image.asset(
+                    kMenuIcon,
+                    height: 13.5,
+                    color: kTertiaryColor,
                   ),
-                ],
-              ),
-              child: Center(
-                child: Image.asset(
-                  kMenuIcon,
-                  height: 13.5,
-                  color: kTertiaryColor,
                 ),
               ),
             ),
           ),
         ),
-      ),
-      drawer: const CustomDrawer(),
-      body: Stack(
-        children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            myLocationEnabled: true,
-            zoomControlsEnabled: true,
-            initialCameraPosition: controller.googleLocation,
-            onMapCreated: (GoogleMapController googleMapController) {
-              controller.mapController.complete(googleMapController);
-            },
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        backgroundColor: kPrimaryColor,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: kTertiaryColor,
-        unselectedItemColor: kTertiaryColor,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+        drawer: const CustomDrawer(),
+        body: Stack(
+          children: [
+            GoogleMap(
+              mapType: MapType.normal,
+              myLocationEnabled: true,
+              zoomControlsEnabled: true,
+              initialCameraPosition: controller.googleLocation,
+              onMapCreated: (GoogleMapController googleMapController) {
+                controller.mapController.complete(googleMapController);
+              },
+            ),
+          ],
         ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          backgroundColor: kPrimaryColor,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: kTertiaryColor,
+          unselectedItemColor: kTertiaryColor,
+          selectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          items: [
+            BottomNavigationBarItem(
+              icon: CustomBottomNavBarItem(
+                onTap: () {},
+                index: 0,
+                icon: kRouteIcon,
+                iconSize: 23,
+              ),
+              label: 'Route',
+            ),
+            BottomNavigationBarItem(
+              icon: CustomBottomNavBarItem(
+                onTap: () => Get.toNamed(AppLinks.reportParkBench),
+                index: 1,
+                icon: kReportIcon,
+                iconSize: 25,
+              ),
+              label: 'Report',
+            ),
+            BottomNavigationBarItem(
+              icon: CustomBottomNavBarItem(
+                onTap: () => Get.toNamed(AppLinks.sendLocation),
+                index: 2,
+                icon: kSendIcon,
+                iconSize: 20,
+              ),
+              label: 'Send',
+            ),
+            BottomNavigationBarItem(
+              icon: CustomBottomNavBarItem(
+                onTap: () => Get.toNamed(AppLinks.rateParkBench, parameters: {"uid": controller.uid!}),
+                index: 3,
+                icon: kRateIcon,
+                iconSize: 20,
+              ),
+              label: 'Rate',
+            ),
+            BottomNavigationBarItem(
+              icon: CustomBottomNavBarItem(
+                onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
+                index: 4,
+                icon: kTopRatedIcon,
+                iconSize: 20,
+              ),
+              label: 'Top',
+            ),
+          ],
         ),
-        items: [
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () {},
-              index: 0,
-              icon: kRouteIcon,
-              iconSize: 23,
-            ),
-            label: 'Route',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.reportParkBench),
-              index: 1,
-              icon: kReportIcon,
-              iconSize: 25,
-            ),
-            label: 'Report',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.sendLocation),
-              index: 2,
-              icon: kSendIcon,
-              iconSize: 20,
-            ),
-            label: 'Send',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.rateParkBench),
-              index: 3,
-              icon: kRateIcon,
-              iconSize: 20,
-            ),
-            label: 'Rate',
-          ),
-          BottomNavigationBarItem(
-            icon: CustomBottomNavBarItem(
-              onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
-              index: 4,
-              icon: kTopRatedIcon,
-              iconSize: 20,
-            ),
-            label: 'Top',
-          ),
-        ],
       ),
     );
   }

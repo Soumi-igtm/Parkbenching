@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:park_benching/view/constant/common.dart';
 
 class BottomNavController extends GetxController {
   String? uid = Get.parameters["uid"];
-
+  final box = GetStorage();
   final Completer<GoogleMapController> mapController = Completer();
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   final CameraPosition googleLocation = const CameraPosition(
@@ -18,7 +19,6 @@ class BottomNavController extends GetxController {
 
   @override
   void onInit() {
-    print("in bottom- $uid");
     Future.delayed(const Duration(milliseconds: 500), () {
       _determinePosition();
     });
@@ -60,6 +60,6 @@ class BottomNavController extends GetxController {
         CameraPosition(target: LatLng(data.latitude, data.longitude), zoom: 19.151926040649414),
       ),
     );
-    //fetchAdsData(data.latitude, data.longitude);
+    box.write("userLocation", {"latitude": data.latitude, "longitude": data.longitude});
   }
 }
