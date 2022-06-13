@@ -25,3 +25,4 @@ const kCheckWhite = 'assets/images/check_white.png';
 const kRatingStar = 'assets/images/rating_star.png';
 const kDummyBench = 'assets/images/dummy_bench.png';
 const kCameraIcon = 'assets/images/camera.png';
+const kParkIcon = 'assets/images/park.png';
