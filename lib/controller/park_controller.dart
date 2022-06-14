@@ -12,13 +12,13 @@ class ParkBenchController extends GetxController {
   final List<ParkBenchModel> dummyBenches = [
     ParkBenchModel(
       parkImage: 'assets/images/dummy_bench.png',
-      parkName: 'Berlin park',
+      parkName: 'Shiraj Park',
       rating: 5.0,
       distance: 300,
     ),
     ParkBenchModel(
       parkImage: 'assets/images/unsplash_rpI9UrPcRTI.png',
-      parkName: 'Carpet park',
+      parkName: 'Aikatan park',
       rating: 4.0,
       distance: 500,
     ),
