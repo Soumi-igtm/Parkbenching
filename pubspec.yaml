@@ -33,6 +33,7 @@ dependencies:
   custom_radio_grouped_button:
   share_plus: ^4.0.7
   cached_network_image: ^3.2.1
+  custom_map_markers: ^0.0.2+1
 
 dev_dependencies:
   flutter_test:

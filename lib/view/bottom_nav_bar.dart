@@ -1,3 +1,4 @@
+import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -53,19 +54,24 @@ class BottomNavBar extends GetView<BottomNavController> {
           ),
         ),
         drawer: const CustomDrawer(),
-        body: Stack(
-          children: [
-            GoogleMap(
-              mapType: MapType.normal,
-              myLocationEnabled: true,
-              zoomControlsEnabled: true,
-              initialCameraPosition: controller.googleLocation,
-              onMapCreated: (GoogleMapController googleMapController) {
-                controller.mapController.complete(googleMapController);
-              },
-            ),
-          ],
-        ),
+        body: CustomGoogleMapMarkerBuilder(
+            customMarkers: controller.markers,
+            builder: (BuildContext context, Set<Marker>? markers) {
+              return GoogleMap(
+                mapType: MapType.normal,
+                myLocationEnabled: true,
+                zoomControlsEnabled: true,
+                initialCameraPosition: controller.googleLocation,
+                markers: markers!,
+                onMapCreated: (GoogleMapController googleMapController) {
+                  controller.mapController.complete(googleMapController);
+                },
+                // onCameraMove: (camera) {
+                //   controller.centerPoint = controller.geo.point(latitude: camera.target.latitude, longitude: camera.target.longitude);
+                //   //print(controller.centerPoint);
+                // },
+              );
+            }),
         bottomNavigationBar: BottomNavigationBar(
           elevation: 0,
           backgroundColor: kPrimaryColor,

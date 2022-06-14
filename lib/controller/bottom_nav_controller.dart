@@ -1,19 +1,29 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:park_benching/view/constant/common.dart';
+import 'package:rxdart/rxdart.dart';
+import '../view/constant/images.dart';
 
 class BottomNavController extends GetxController {
   String? uid = Get.parameters["uid"];
+
   final box = GetStorage();
   late DocumentSnapshot userSnap;
   final Completer<GoogleMapController> mapController = Completer();
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
+  final radius = BehaviorSubject<double>.seeded(20.0);
+  late Geoflutterfire geo;
+  late GeoFirePoint centerPoint;
+  late Stream<List<DocumentSnapshot>> stream;
+  List<MarkerData> markers = <MarkerData>[];
   final CameraPosition googleLocation = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
@@ -22,7 +32,8 @@ class BottomNavController extends GetxController {
   @override
   void onInit() {
     fetchUser();
-    Future.delayed(const Duration(milliseconds: 500), () {
+    geo = Geoflutterfire();
+    Future.delayed(const Duration(milliseconds: 200), () {
       _determinePosition();
     });
     super.onInit();
@@ -68,6 +79,42 @@ class BottomNavController extends GetxController {
         CameraPosition(target: LatLng(data.latitude, data.longitude), zoom: 19.151926040649414),
       ),
     );
+
+    centerPoint = geo.point(latitude: data.latitude, longitude: data.longitude);
+    stream = radius.switchMap((rad) {
+      final collectionReference = FirebaseFirestore.instance.collection("benches");
+
+      return geo.collection(collectionRef: collectionReference).within(center: centerPoint, radius: rad, field: 'location', strictMode: true);
+    });
+    stream.listen((List<DocumentSnapshot> documentList) {
+      updateMarkers(documentList);
+    });
     box.write("userLocation", {"latitude": data.latitude, "longitude": data.longitude});
+    update();
+  }
+
+  void addMarker(String benchID, double lat, double lng) {
+    final _marker = MarkerData(marker: Marker(markerId: MarkerId(benchID), position: LatLng(lat, lng)), child: Image.asset(kMapPin, width: 20,));
+
+    markers.add(_marker);
+    update();
+  }
+
+  void updateMarkers(List<DocumentSnapshot> documentList) {
+    for (var document in documentList) {
+      final benchID = document.id;
+      final GeoPoint point = document['location']['geopoint'];
+      addMarker(benchID, point.latitude, point.longitude);
+    }
+    print("------------------------------------------------------------------------------------------------------------------------------------");
+    print(markers.toList());
+    print("------------------------------------------------------------------------------------------------------------------------------------");
+    // update();
+  }
+
+  @override
+  void onClose() {
+    radius.close();
+    super.onClose();
   }
 }

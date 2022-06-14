@@ -106,6 +106,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  custom_map_markers:
+    dependency: "direct main"
+    description:
+      name: custom_map_markers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2+1"
   custom_radio_grouped_button:
     dependency: "direct main"
     description:
