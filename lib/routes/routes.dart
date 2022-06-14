@@ -32,7 +32,7 @@ class AppRoutes {
     GetPage(
       name: AppLinks.bottomNavBar,
       page: () => const BottomNavBar(),
-      binding: BottomNavBinding(),
+      //binding: BottomNavBinding(),
     ),
     GetPage(
       name: AppLinks.reportParkBench,

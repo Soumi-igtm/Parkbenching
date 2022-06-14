@@ -12,129 +12,131 @@ import 'package:park_benching/view/widget/my_text.dart';
 
 import '../controller/bottom_nav_controller.dart';
 
-class BottomNavBar extends GetView<BottomNavController> {
+class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        key: controller.globalKey,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          leading: Center(
-            child: GestureDetector(
-              onTap: () => controller.globalKey.currentState!.openDrawer(),
-              child: Container(
-                height: 40,
-                width: 40,
-                margin: const EdgeInsets.only(bottom: 8),
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: kWhiteColor,
-                  shadows: [
-                    BoxShadow(
-                      color: kBlackColor.withOpacity(0.1),
-                      blurRadius: 4,
-                      offset: const Offset(4, 4),
-                      spreadRadius: 2,
+    return GetBuilder<BottomNavController>(
+      init: BottomNavController(),
+      builder: (controller) {
+        return SafeArea(
+          child: Scaffold(
+            key: controller.globalKey,
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              leading: Center(
+                child: GestureDetector(
+                  onTap: () => controller.globalKey.currentState!.openDrawer(),
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    margin: const EdgeInsets.only(bottom: 8),
+                    decoration: ShapeDecoration(
+                      shape: const CircleBorder(),
+                      color: kWhiteColor,
+                      shadows: [
+                        BoxShadow(
+                          color: kBlackColor.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(4, 4),
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: Image.asset(
-                    kMenuIcon,
-                    height: 13.5,
-                    color: kTertiaryColor,
+                    child: Center(
+                      child: Image.asset(
+                        kMenuIcon,
+                        height: 13.5,
+                        color: kTertiaryColor,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
+            drawer: const CustomDrawer(),
+            body: CustomGoogleMapMarkerBuilder(
+                customMarkers: controller.markers,
+                builder: (BuildContext context, Set<Marker>? markers) {
+                  return GoogleMap(
+                    mapType: MapType.normal,
+                    myLocationEnabled: true,
+                    zoomControlsEnabled: true,
+                    initialCameraPosition: controller.googleLocation,
+                    markers: markers ?? {},
+                    onMapCreated: (GoogleMapController googleMapController) {
+                      controller.mapController.complete(googleMapController);
+                      controller.determinePosition();
+                    },
+                  );
+                }),
+            bottomNavigationBar: BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: kPrimaryColor,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: kTertiaryColor,
+              unselectedItemColor: kTertiaryColor,
+              selectedLabelStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              items: [
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () {},
+                    index: 0,
+                    icon: kRouteIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Route',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () {},
+                    index: 1,
+                    icon: kParkIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Parks',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () {},
+                    index: 2,
+                    icon: kBenchIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Benches',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.reportParkBench),
+                    index: 3,
+                    icon: kReportIcon,
+                    iconSize: 22,
+                  ),
+                  label: 'Report',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.rateParkBench, parameters: {"uid": controller.uid!}),
+                    index: 4,
+                    icon: kRateIcon,
+                    iconSize: 17,
+                  ),
+                  label: 'Rate',
+                ),
+              ],
+            ),
           ),
-        ),
-        drawer: const CustomDrawer(),
-        body: CustomGoogleMapMarkerBuilder(
-            customMarkers: controller.markers,
-            builder: (BuildContext context, Set<Marker>? markers) {
-              return GoogleMap(
-                mapType: MapType.normal,
-                myLocationEnabled: true,
-                zoomControlsEnabled: true,
-                initialCameraPosition: controller.googleLocation,
-                markers: markers!,
-                onMapCreated: (GoogleMapController googleMapController) {
-                  controller.mapController.complete(googleMapController);
-                },
-                // onCameraMove: (camera) {
-                //   controller.centerPoint = controller.geo.point(latitude: camera.target.latitude, longitude: camera.target.longitude);
-                //   //print(controller.centerPoint);
-                // },
-              );
-            }),
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 0,
-          backgroundColor: kPrimaryColor,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: kTertiaryColor,
-          unselectedItemColor: kTertiaryColor,
-          selectedLabelStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-          items: [
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () {},
-                index: 0,
-                icon: kRouteIcon,
-                iconSize: 20,
-              ),
-              label: 'Route',
-            ),
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () {},
-                index: 1,
-                icon: kParkIcon,
-                iconSize: 20,
-              ),
-              label: 'Parks',
-            ),
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () {},
-                index: 2,
-                icon: kBenchIcon,
-                iconSize: 20,
-              ),
-              label: 'Benches',
-            ),
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () => Get.toNamed(AppLinks.reportParkBench),
-                index: 3,
-                icon: kReportIcon,
-                iconSize: 22,
-              ),
-              label: 'Report',
-            ),
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () => Get.toNamed(AppLinks.rateParkBench, parameters: {"uid": controller.uid!}),
-                index: 4,
-                icon: kRateIcon,
-                iconSize: 17,
-              ),
-              label: 'Rate',
-            ),
-          ],
-        ),
-      ),
+        );
+      }
     );
   }
 

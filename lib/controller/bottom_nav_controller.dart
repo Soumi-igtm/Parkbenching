@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/common.dart';
 import 'package:rxdart/rxdart.dart';
 import '../view/constant/images.dart';
@@ -34,7 +35,7 @@ class BottomNavController extends GetxController {
     fetchUser();
     geo = Geoflutterfire();
     Future.delayed(const Duration(milliseconds: 200), () {
-      _determinePosition();
+      determinePosition();
     });
     super.onInit();
   }
@@ -44,7 +45,7 @@ class BottomNavController extends GetxController {
     update();
   }
 
-  void _determinePosition() async {
+  void determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
     // check for location permission
@@ -90,26 +91,20 @@ class BottomNavController extends GetxController {
       updateMarkers(documentList);
     });
     box.write("userLocation", {"latitude": data.latitude, "longitude": data.longitude});
-    update();
-  }
-
-  void addMarker(String benchID, double lat, double lng) {
-    final _marker = MarkerData(marker: Marker(markerId: MarkerId(benchID), position: LatLng(lat, lng)), child: Image.asset(kMapPin, width: 20,));
-
-    markers.add(_marker);
-    update();
   }
 
   void updateMarkers(List<DocumentSnapshot> documentList) {
+    List<MarkerData> temp = [];
     for (var document in documentList) {
       final benchID = document.id;
       final GeoPoint point = document['location']['geopoint'];
-      addMarker(benchID, point.latitude, point.longitude);
+      temp.add(
+        MarkerData(
+            marker: Marker(markerId: MarkerId(benchID), position: LatLng(point.latitude, point.longitude)), child: Image.asset(kMapPin, width: 40)),
+      );
     }
-    print("------------------------------------------------------------------------------------------------------------------------------------");
-    print(markers.toList());
-    print("------------------------------------------------------------------------------------------------------------------------------------");
-    // update();
+    markers.addAll(temp);
+    update();
   }
 
   @override
