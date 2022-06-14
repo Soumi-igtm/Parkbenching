@@ -98,7 +98,7 @@ class BottomNavBar extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: CustomBottomNavBarItem(
-                    onTap: () {},
+                    onTap: () => Get.toNamed(AppLinks.parkbenches),
                     index: 1,
                     icon: kParkIcon,
                     iconSize: 20,
@@ -107,12 +107,12 @@ class BottomNavBar extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: CustomBottomNavBarItem(
-                    onTap: () {},
+                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
                     index: 2,
                     icon: kBenchIcon,
                     iconSize: 20,
                   ),
-                  label: 'Benches',
+                  label: 'Top Parks',
                 ),
                 BottomNavigationBarItem(
                   icon: CustomBottomNavBarItem(

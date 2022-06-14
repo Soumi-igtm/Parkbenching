@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import 'package:park_benching/view/launch/intro.dart';
 import 'package:park_benching/view/launch/splash_screen.dart';
+import 'package:park_benching/view/park_benches/park_benches.dart';
 import 'package:park_benching/view/rate_park_bench.dart';
 import 'package:park_benching/view/report_park_bench/report/report.dart';
 import 'package:park_benching/view/report_park_bench/report_park_bench.dart';
@@ -58,6 +59,11 @@ class AppRoutes {
       name: AppLinks.topRatedParkBenches,
       page: () => const TopRatedParkBenches(),
     ),
+
+    GetPage(
+      name: AppLinks.parkbenches,
+      page: () => const ParkBenches(),
+    ),
   ];
 }
 
@@ -71,4 +77,6 @@ class AppLinks {
   static const rateParkBench = '/rate_park_bench';
   static const sendLocation = '/send_location';
   static const topRatedParkBenches = '/top_rated_park_benches';
+  static const parkbenches = '/park_benches';
+
 }
