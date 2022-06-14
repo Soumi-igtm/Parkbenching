@@ -42,8 +42,7 @@ class AuthMethods {
     try {
       await _auth.createUserWithEmailAndPassword(email: email, password: password).then((value) {
         String uid = value.user!.uid;
-        usersCollection.doc(uid).set({"name": "", "email": email});
-        benchesCollection.where("active", isEqualTo: true).get();
+        usersCollection.doc(uid).set({"name": "", "email": email, "image": ""});
         Get.offAllNamed(AppLinks.bottomNavBar, parameters: {"uid": uid});
       });
     } on FirebaseAuthException catch (e) {
@@ -59,5 +58,10 @@ class AuthMethods {
           break;
       }
     }
+  }
+
+  Future<bool> updateField({required String uid, required String key, required String value}) async {
+    await usersCollection.doc(uid).update({key: value});
+    return true;
   }
 }

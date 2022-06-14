@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:park_benching/controller/bottom_nav_controller.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/support/support.dart';
 import 'package:park_benching/view/widget/my_text.dart';
+
+import '../../routes/routes.dart';
+import '../view_profile.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -11,67 +15,68 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            searchBox(),
-            ListTile(
-              onTap: () {},
-              leading: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      child: GetBuilder<BottomNavController>(
+          init: BottomNavController(),
+          builder: (controller) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Image.asset(
-                    kProfileIcon,
+                  searchBox(),
+                  ListTile(
+                    onTap: () => Get.to(() => ViewProfile(uid: controller.uid!)),
+                    leading: Image.asset(kProfileIcon, height: 40),
+                    title: MyText(
+                      text: controller.userSnap["name"].isEmpty ? "Add a name" : controller.userSnap["name"],
+                      size: 16,
+                      weight: FontWeight.w600,
+                    ),
+                    subtitle: MyText(
+                      text: 'View profile',
+                      size: 11,
+                      weight: FontWeight.w500,
+                      color: kGreyColor,
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 1.0,
+                    color: Color(0xffDADADA),
+                  ),
+                  const SizedBox(
                     height: 20,
+                  ),
+                  DrawerTiles(
+                    onTap: () {},
+                    icon: kBenchIcon,
+                    iconSize: 24.0,
+                    title: 'Bench History',
+                  ),
+                  DrawerTiles(
+                    onTap: () {},
+                    icon: kReportHistoryIcon,
+                    iconSize: 25.0,
+                    title: 'Report History',
+                  ),
+                  DrawerTiles(
+                    onTap: () => Get.toNamed(AppLinks.sendLocation),
+                    icon: kSendIcon,
+                    title: 'Send to a friend',
+                  ),
+                  DrawerTiles(
+                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
+                    icon: kTopRatedBenchesIcon,
+                    title: 'Top Rated Benches',
+                  ),
+                  DrawerTiles(
+                    onTap: () => Get.to(() => const Support()),
+                    icon: kSupportIcon,
+                    title: 'Support',
                   ),
                 ],
               ),
-              title: MyText(
-                text: 'Simon Petran',
-                size: 16,
-                weight: FontWeight.w600,
-              ),
-              subtitle: MyText(
-                text: 'View profile',
-                size: 11,
-                weight: FontWeight.w500,
-                color: kGreyColor,
-              ),
-            ),
-            const Divider(
-              thickness: 1.0,
-              color: Color(0xffDADADA),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            DrawerTiles(
-              onTap: () {},
-              icon: kBenchIcon,
-              iconSize: 24.0,
-              title: 'Bench History',
-            ),
-            DrawerTiles(
-              onTap: () {},
-              icon: kReportHistoryIcon,
-              iconSize: 25.0,
-              title: 'Report History',
-            ),
-            DrawerTiles(
-              onTap: () {},
-              icon: kTopRatedBenchesIcon,
-              title: 'Top Rated Benches',
-            ),
-            DrawerTiles(
-              onTap: () => Get.to(() => const Support()),
-              icon: kSupportIcon,
-              title: 'Support',
-            ),
-          ],
-        ),
-      ),
+            );
+          }),
       backgroundColor: kPrimaryColor,
     );
   }

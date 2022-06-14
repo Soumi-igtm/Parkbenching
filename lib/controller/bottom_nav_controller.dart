@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:park_benching/view/constant/common.dart';
 class BottomNavController extends GetxController {
   String? uid = Get.parameters["uid"];
   final box = GetStorage();
+  late DocumentSnapshot userSnap;
   final Completer<GoogleMapController> mapController = Completer();
   final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   final CameraPosition googleLocation = const CameraPosition(
@@ -19,10 +21,16 @@ class BottomNavController extends GetxController {
 
   @override
   void onInit() {
+    fetchUser();
     Future.delayed(const Duration(milliseconds: 500), () {
       _determinePosition();
     });
     super.onInit();
+  }
+
+  void fetchUser() async {
+    userSnap = await usersCollection.doc(uid!).get();
+    update();
   }
 
   void _determinePosition() async {

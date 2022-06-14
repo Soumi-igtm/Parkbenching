@@ -90,32 +90,32 @@ class BottomNavBar extends GetView<BottomNavController> {
               ),
               label: 'Route',
             ),
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: CustomBottomNavBarItem(
-               onTap: () {},
-               index: 1,
+                onTap: () {},
+                index: 1,
                 icon: kParkIcon,
                 iconSize: 20,
-                ),
-                 label: 'Parks',
-                  ),
+              ),
+              label: 'Parks',
+            ),
+            BottomNavigationBarItem(
+              icon: CustomBottomNavBarItem(
+                onTap: () {},
+                index: 2,
+                icon: kBenchIcon,
+                iconSize: 20,
+              ),
+              label: 'Benches',
+            ),
             BottomNavigationBarItem(
               icon: CustomBottomNavBarItem(
                 onTap: () => Get.toNamed(AppLinks.reportParkBench),
-                index: 2,
+                index: 3,
                 icon: kReportIcon,
                 iconSize: 22,
               ),
               label: 'Report',
-            ),
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () => Get.toNamed(AppLinks.sendLocation),
-                index: 3,
-                icon: kSendIcon,
-                iconSize: 17,
-              ),
-              label: 'Send',
             ),
             BottomNavigationBarItem(
               icon: CustomBottomNavBarItem(
@@ -125,15 +125,6 @@ class BottomNavBar extends GetView<BottomNavController> {
                 iconSize: 17,
               ),
               label: 'Rate',
-            ),
-            BottomNavigationBarItem(
-              icon: CustomBottomNavBarItem(
-                onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
-                index: 5,
-                icon: kTopRatedIcon,
-                iconSize: 17,
-              ),
-              label: 'Top',
             ),
           ],
         ),
