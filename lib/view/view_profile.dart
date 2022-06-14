@@ -1,10 +1,17 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:park_benching/controller/bottom_nav_controller.dart';
 import 'package:park_benching/resources/auth_methods.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/common.dart';
 import 'package:park_benching/view/widget/custom_app_bar.dart';
+import 'package:park_benching/view/widget/my_button.dart';
 
 import 'constant/images.dart';
 import 'constant/validators.dart';
@@ -20,6 +27,7 @@ class ViewProfile extends StatefulWidget {
 class _ViewProfileState extends State<ViewProfile> {
   final TextEditingController nameController = TextEditingController();
   late BottomNavController controller;
+  String picture = "";
   @override
   void initState() {
     loadUserData();
@@ -32,6 +40,32 @@ class _ViewProfileState extends State<ViewProfile> {
     setState(() {
       nameController.text = controller.userSnap['name'];
     });
+  }
+
+  Future pickImage({bool fromGallery = false}) async {
+    try {
+      final image = await ImagePicker().pickImage(source: fromGallery ? ImageSource.gallery : ImageSource.camera);
+
+      if (image == null) return;
+
+      picture = image.path;
+      Get.back();
+      customToast("Uploading image...");
+      try {
+        String ext2 = picture.split(".").last;
+        TaskSnapshot _pSnapshot =
+            await FirebaseStorage.instance.ref('users/${widget.uid}/pic_${DateTime.now().millisecondsSinceEpoch}.$ext2').putFile(File(picture));
+        String picUrl = await _pSnapshot.ref.getDownloadURL();
+        AuthMethods.instance.updateField(uid: widget.uid, key: "image", value: picUrl);
+        controller.fetchUser();
+        customToast("Image updated");
+        Get.off(() => ViewProfile(uid: widget.uid));
+      } on FirebaseException catch (e) {
+        customToast(e.toString());
+      }
+    } on PlatformException catch (e) {
+      customToast("Failed to pick image");
+    }
   }
 
   @override
@@ -52,19 +86,57 @@ class _ViewProfileState extends State<ViewProfile> {
             child: Stack(
               alignment: AlignmentDirectional.bottomEnd,
               children: [
-                Image.asset(
-                  kProfileIcon,
-                  width: context.width / 2,
-                  height: context.width / 2,
-                  fit: BoxFit.fitHeight,
-                ),
+                controller.userSnap["image"].isEmpty
+                    ? Image.asset(
+                        kProfileIcon,
+                        width: context.width / 2,
+                        height: context.width / 2,
+                        fit: BoxFit.fitHeight,
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: CachedNetworkImage(
+                          imageUrl: controller.userSnap["image"],
+                          placeholder: (context, s) => Image.asset(kProfileIcon),
+                          width: context.width / 2,
+                          height: context.width / 2,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
                 TextButton(
                   style: TextButton.styleFrom(
                     backgroundColor: kSecondaryColor,
                     shape: const CircleBorder(),
                   ),
                   child: const Icon(Icons.edit, color: kWhiteColor),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.bottomSheet(
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          MyButton(
+                            text: "Gallery",
+                            btnBgColor: kWhiteColor,
+                            textColor: kTertiaryColor,
+                            onPressed: () => pickImage(fromGallery: true),
+                          ),
+                          const Divider(),
+                          MyButton(
+                            text: "Camera",
+                            btnBgColor: kWhiteColor,
+                            textColor: kTertiaryColor,
+                            onPressed: () => pickImage(),
+                          )
+                        ],
+                      ),
+                      backgroundColor: kWhiteColor,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(15),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

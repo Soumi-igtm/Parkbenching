@@ -32,8 +32,7 @@ dependencies:
   geoflutterfire: ^3.0.3
   custom_radio_grouped_button:
   share_plus: ^4.0.7
-
-
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:

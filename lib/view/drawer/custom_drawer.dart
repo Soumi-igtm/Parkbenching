@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:park_benching/controller/bottom_nav_controller.dart';
@@ -26,7 +27,21 @@ class CustomDrawer extends StatelessWidget {
                   searchBox(),
                   ListTile(
                     onTap: () => Get.to(() => ViewProfile(uid: controller.uid!)),
-                    leading: Image.asset(kProfileIcon, height: 40),
+                    leading: controller.userSnap["image"].isEmpty
+                        ? Image.asset(
+                            kProfileIcon,
+                            height: 40,
+                            fit: BoxFit.fitHeight,
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              imageUrl: controller.userSnap["image"],
+                              placeholder: (context, s) => Image.asset(kProfileIcon),
+                              height: 40,
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
                     title: MyText(
                       text: controller.userSnap["name"].isEmpty ? "Add a name" : controller.userSnap["name"],
                       size: 16,
