@@ -64,7 +64,7 @@ class TopRatedParkBenches extends StatelessWidget {
                             itemCount: benchData.length,
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.symmetric(vertical: 20),
-                            itemBuilder: (controller, index) {
+                            itemBuilder: (context, index) {
                               return BenchCards(
                                 bid: benchData[index].id,
                                 parkImage: benchData[index]["images"][0],
@@ -294,7 +294,6 @@ class BenchCards extends StatelessWidget {
       ),
     );
   }
-
 
   void reviewSheet(String bid) {
     Get.bottomSheet(
