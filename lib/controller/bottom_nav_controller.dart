@@ -182,7 +182,7 @@ class BottomNavController extends GetxController {
                                     ),
                                     MyText(
                                       text:
-                                          "${calculateDistance(lat1: centerPoint.latitude, lon1: centerPoint.longitude, lat2: pinData["location"]["geopoint"].latitude, lon2: pinData["location"]["geopoint"].longitude)} KM",
+                                          "${meterIntoKm(calculateDistance(lat1: centerPoint.latitude, lon1: centerPoint.longitude, lat2: pinData["location"]["geopoint"].latitude, lon2: pinData["location"]["geopoint"].longitude))}",
                                       size: 14,
                                       weight: FontWeight.w600,
                                     ),

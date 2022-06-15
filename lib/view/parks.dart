@@ -246,15 +246,4 @@ class ParkCards extends StatelessWidget {
       ),
     );
   }
-
-  meterIntoKm(double meter) {
-    meter = distance!;
-    if (meter < 1000) {
-      int? distanceInMeter = meter.toInt();
-      return distanceInMeter;
-    } else {
-      meter = meter / 1000;
-      return meter;
-    }
-  }
 }
