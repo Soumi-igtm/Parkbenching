@@ -112,6 +112,7 @@ class ReportParkBenchController extends GetxController {
       List photosUrl = [];
 
       for (var photo in photos) {
+        customToast("uploading $photo");
         try {
           String ext2 = photo.split(".").last;
           TaskSnapshot _pSnapshot =
@@ -130,13 +131,14 @@ class ReportParkBenchController extends GetxController {
         titleStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
         content: MyText(text: "Thanks for reporting this bench. We will get the issue resolved quickly"),
         confirm: ElevatedButton(
-            onPressed: () => Get.offNamed(AppLinks.bottomNavBar, parameters: {"uid": uid!}),
-            style: ElevatedButton.styleFrom(primary: kTertiaryColor),
-            child: MyText(
-              text: "Close",
-              weight: FontWeight.bold,
-              color: kWhiteColor,
-            )),
+          onPressed: () => Get.offNamed(AppLinks.bottomNavBar, parameters: {"uid": uid!}),
+          style: ElevatedButton.styleFrom(primary: kTertiaryColor),
+          child: MyText(
+            text: "Close",
+            weight: FontWeight.bold,
+            color: kWhiteColor,
+          ),
+        ),
       );
     });
   }

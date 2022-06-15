@@ -79,11 +79,6 @@ class CustomDrawer extends StatelessWidget {
                     title: 'Send to a friend',
                   ),
                   DrawerTiles(
-                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
-                    icon: kTopRatedBenchesIcon,
-                    title: 'Top Rated Benches',
-                  ),
-                  DrawerTiles(
                     onTap: () => Get.to(() => const Support()),
                     icon: kSupportIcon,
                     title: 'Support',

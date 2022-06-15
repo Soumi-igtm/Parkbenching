@@ -1,11 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:park_benching/controller/top_rated_park_benches_controller.dart';
 import 'package:park_benching/view/constant/color.dart';
+import 'package:park_benching/view/constant/common.dart';
 import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/widget/custom_app_bar.dart';
 import 'package:park_benching/view/widget/my_text.dart';
+import 'package:intl/intl.dart';
 
 class TopRatedParkBenches extends StatelessWidget {
   const TopRatedParkBenches({Key? key}) : super(key: key);
@@ -40,9 +44,7 @@ class TopRatedParkBenches extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                const SizedBox(height: 15),
                 Row(
                   children: [
                     radiusButtons(
@@ -51,63 +53,27 @@ class TopRatedParkBenches extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 Expanded(
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                    ),
-                    children: controller.currentIndex == 0
-                        ? controller.getDummyBenches
-                            .where(
-                            (element) => element.distance! < 1000,
-                          )
-                            .map((e) {
-                            return BenchCards(
-                              parkImage: e.parkImage,
-                              parkName: e.parkName,
-                              rating: e.rating,
-                              distance: e.distance,
-                            );
-                          }).toList()
-                        : controller.currentIndex == 1
-                            ? controller.getDummyBenches
-                                .where(
-                                (element) => element.distance! < 10000,
-                              )
-                                .map((e) {
-                                return BenchCards(
-                                  parkImage: e.parkImage,
-                                  parkName: e.parkName,
-                                  rating: e.rating,
-                                  distance: e.distance,
-                                );
-                              }).toList()
-                            : controller.currentIndex == 3
-                                ? controller.getDummyBenches
-                                    .where(
-                                    (element) => element.distance! < 10000,
-                                  )
-                                    .map((e) {
-                                    return BenchCards(
-                                      parkImage: e.parkImage,
-                                      parkName: e.parkName,
-                                      rating: e.rating,
-                                      distance: e.distance,
-                                    );
-                                  }).toList()
-                                : controller.getDummyBenches.map((e) {
-                                    return BenchCards(
-                                      parkImage: e.parkImage,
-                                      parkName: e.parkName,
-                                      rating: e.rating,
-                                      distance: e.distance,
-                                    );
-                                  }).toList(),
-                  ),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: benchesCollection.where("active", isEqualTo: true).orderBy("rating", descending: true).snapshots(),
+                      builder: (context, bSnapshot) {
+                        if (!bSnapshot.hasData) return const Center(child: CircularProgressIndicator());
+                        List<DocumentSnapshot> benchData = bSnapshot.data!.docs;
+                        return ListView.builder(
+                            itemCount: benchData.length,
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            itemBuilder: (controller, index) {
+                              return BenchCards(
+                                bid: benchData[index].id,
+                                parkImage: benchData[index]["images"][0],
+                                parkName: benchData[index]["parkName"],
+                                rating: (benchData[index]["rating"] / benchData[index]["ratingCount"]).toDouble(),
+                                distance: 200,
+                              );
+                            });
+                      }),
                 ),
               ],
             ),
@@ -143,14 +109,10 @@ class TopRatedParkBenches extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
-                      color: controller.currentIndex == index
-                          ? kYellowColor
-                          : kSecondaryColor,
+                      color: controller.currentIndex == index ? kYellowColor : kSecondaryColor,
                       width: 1.0,
                     ),
-                    color: controller.currentIndex == index
-                        ? kYellowColor.withOpacity(0.05)
-                        : kSecondaryColor.withOpacity(0.05),
+                    color: controller.currentIndex == index ? kYellowColor.withOpacity(0.05) : kSecondaryColor.withOpacity(0.05),
                   ),
                   child: Center(
                     child: MyText(
@@ -172,15 +134,16 @@ class TopRatedParkBenches extends StatelessWidget {
 
 // ignore: must_be_immutable
 class BenchCards extends StatelessWidget {
-  String? parkImage, parkName;
-  double? rating, distance;
+  String parkImage, parkName, bid;
+  double rating, distance;
 
   BenchCards({
     Key? key,
-    this.parkImage,
-    this.parkName,
-    this.distance,
-    this.rating,
+    required this.bid,
+    required this.parkImage,
+    required this.parkName,
+    required this.distance,
+    required this.rating,
   }) : super(key: key);
 
   @override
@@ -213,10 +176,11 @@ class BenchCards extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  child: Image.asset(
-                    parkImage!,
+                  child: CachedNetworkImage(
+                    imageUrl: parkImage,
                     height: 78,
-                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 Padding(
@@ -229,7 +193,7 @@ class BenchCards extends StatelessWidget {
                     children: [
                       MyText(
                         paddingBottom: 8,
-                        text: '$parkName',
+                        text: parkName,
                         size: 14,
                         maxLines: 1,
                         overFlow: TextOverflow.ellipsis,
@@ -238,14 +202,14 @@ class BenchCards extends StatelessWidget {
                       Row(
                         children: [
                           MyText(
-                            text: rating.toString(),
+                            text: rating.toStringAsFixed(1),
                             size: 11,
                             paddingRight: 3.0,
                             weight: FontWeight.w500,
                           ),
                           Expanded(
                             child: RatingBar(
-                              initialRating: 5,
+                              initialRating: rating,
                               minRating: 1,
                               itemSize: 8.0,
                               direction: Axis.horizontal,
@@ -256,9 +220,7 @@ class BenchCards extends StatelessWidget {
                               ),
                               unratedColor: const Color(0xffCCCFD9),
                               glow: false,
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
+                              onRatingUpdate: (rating) {},
                               ratingWidget: RatingWidget(
                                 empty: Image.asset(
                                   kRatingStar,
@@ -284,9 +246,7 @@ class BenchCards extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
-            width: 15,
-          ),
+          const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,9 +260,7 @@ class BenchCards extends StatelessWidget {
                       color: kGreyColor,
                     ),
                     MyText(
-                      text: distance! < 1000
-                          ? '${meterIntoKm(distance!)}m'
-                          : '${meterIntoKm(distance!)}km',
+                      text: distance < 1000 ? '${meterIntoKm(distance)}m' : '${meterIntoKm(distance)}km',
                       size: 16,
                       weight: FontWeight.w600,
                     ),
@@ -310,16 +268,16 @@ class BenchCards extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Image.asset(
-                    'assets/images/route_with_bg.png',
-                    height: 35,
-                  ),
+                  child: Image.asset('assets/images/route_with_bg.png', height: 35),
                 ),
-                MyText(
-                  text: 'Reviews',
-                  size: 14,
-                  weight: FontWeight.w500,
-                  color: kYellowColor,
+                GestureDetector(
+                  onTap: () => reviewSheet(bid),
+                  child: MyText(
+                    text: 'Reviews',
+                    size: 14,
+                    weight: FontWeight.w500,
+                    color: kYellowColor,
+                  ),
                 )
               ],
             ),
@@ -330,7 +288,7 @@ class BenchCards extends StatelessWidget {
   }
 
   meterIntoKm(double meter) {
-    meter = distance!;
+    meter = distance;
     if (meter < 1000) {
       int? distanceInMeter = meter.toInt();
       return distanceInMeter;
@@ -338,5 +296,86 @@ class BenchCards extends StatelessWidget {
       meter = meter / 1000;
       return meter;
     }
+  }
+
+  void reviewSheet(String bid) {
+    Get.bottomSheet(
+      StreamBuilder<QuerySnapshot>(
+          stream: benchesCollection.doc(bid).collection("reviews").snapshots(),
+          builder: (context, rSnapshot) {
+            if (!rSnapshot.hasData) return const Center(child: CircularProgressIndicator());
+            List<DocumentSnapshot> dataReview = rSnapshot.data!.docs;
+            return ListView.separated(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              itemCount: dataReview.length,
+              itemBuilder: (context, index) {
+                return StreamBuilder<DocumentSnapshot>(
+                    stream: usersCollection.doc(dataReview[index]["uid"]).snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) return Container();
+                      DocumentSnapshot uData = snapshot.data!;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: uData["image"].isEmpty
+                                ? Image.asset(
+                                    kProfileIcon,
+                                    height: 40,
+                                    fit: BoxFit.fitHeight,
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: CachedNetworkImage(
+                                      imageUrl: uData["image"],
+                                      placeholder: (context, s) => Image.asset(kProfileIcon),
+                                      height: 40,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                  ),
+                            title: MyText(text: uData["name"], size: 16, maxLines: 1, overFlow: TextOverflow.ellipsis, weight: FontWeight.bold),
+                            subtitle: MyText(text: DateFormat.yMMMMd().format(dataReview[index]["reviewDate"].toDate()), size: 12),
+                          ),
+                          RatingBar(
+                            initialRating: dataReview[index]["rating"].toDouble(),
+                            minRating: 1,
+                            itemSize: 8.0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                            unratedColor: const Color(0xffCCCFD9),
+                            glow: false,
+                            onRatingUpdate: (rating) {},
+                            ratingWidget: RatingWidget(
+                              empty: Image.asset(
+                                kRatingStar,
+                                height: 16.20,
+                                color: const Color(0xffCCCFD9),
+                              ),
+                              full: Image.asset(
+                                kRatingStar,
+                                height: 16.20,
+                              ),
+                              half: Image.asset(
+                                kRatingStar,
+                                height: 16.20,
+                              ),
+                            ),
+                          ),
+                          MyText(text: dataReview[index]["review"])
+                        ],
+                      );
+                    });
+              },
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
+            );
+          }),
+      backgroundColor: kWhiteColor,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
+    );
   }
 }

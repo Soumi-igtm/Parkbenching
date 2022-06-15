@@ -2,17 +2,13 @@ import 'dart:io';
 
 import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/routes/routes.dart';
 import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/widget/custom_app_bar.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
 import '../controller/report_park_bench_controller.dart';
-import 'widget/my_text_field.dart';
 
 class ReportParkBench extends StatelessWidget {
   const ReportParkBench({Key? key}) : super(key: key);
@@ -217,75 +213,6 @@ class ReportParkBench extends StatelessWidget {
         });
   }
 
-  Widget takePictureOfBench(VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 80,
-        margin: const EdgeInsets.only(
-          left: 15,
-          right: 15,
-          top: 15,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: kSecondaryColor,
-            width: 1.0,
-          ),
-          color: kSecondaryColor.withOpacity(0.05),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              kCameraIcon,
-              height: 10.33,
-            ),
-            MaterialButton(
-              color: Colors.green[100],
-              child: const Text(
-                "Take picture of park bench",
-                style: TextStyle(color: Colors.black, fontFamily: "Mulish"),
-              ),
-              onPressed: () {
-                // pickImage();
-              },
-            ),
-            //image != null ? Image.file(image!) : Text("no image selected")
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget reportBrokenBench() {
-    return GestureDetector(
-      onTap: () => Get.toNamed(AppLinks.report),
-      child: Container(
-        margin: const EdgeInsets.only(
-          top: 10,
-        ),
-        height: 45,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: kSecondaryColor,
-            width: 1.0,
-          ),
-          color: kSecondaryColor.withOpacity(0.05),
-        ),
-        child: Center(
-          child: MyText(
-            text: 'Report broken bench',
-            size: 13,
-            weight: FontWeight.w700,
-            fontFamily: 'Mulish',
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget heading(String heading) {
     return MyText(

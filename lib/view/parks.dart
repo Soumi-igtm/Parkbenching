@@ -1,11 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:park_benching/controller/park_controller.dart';
-import 'package:park_benching/view/add_park.dart';
-
+import 'package:park_benching/routes/routes.dart';
 import 'constant/color.dart';
 import 'constant/common.dart';
 import 'constant/images.dart';
@@ -24,7 +23,7 @@ class Parks extends StatelessWidget {
           appBar: CustomAppBar(title: 'Parks'),
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           floatingActionButton: TextButton(
-            onPressed: () => Get.to(() => AddPark(uid: controller.uid!)),
+            onPressed: () => Get.toNamed(AppLinks.addPark, parameters: {"uid": controller.uid!}),
             style: TextButton.styleFrom(backgroundColor: kTertiaryColor, shape: const StadiumBorder()),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
@@ -60,11 +59,12 @@ class Parks extends StatelessWidget {
                           physics: const BouncingScrollPhysics(),
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           itemBuilder: (BuildContext context, int index) {
-                            return BenchCards(
-                              parkImage: parkList[index]["parkImage"],
+                            return ParkCards(
+                              parkImage: parkList[index]["images"][0],
                               parkName: parkList[index]["parkName"],
-                              rating: parkList[index]["rating"],
-                              distance: parkList[index]["distance"],
+                              city: parkList[index]["city"],
+                              state: parkList[index]["state"],
+                              distance: 299,
                             );
                           },
                         );
@@ -128,16 +128,17 @@ class Parks extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class BenchCards extends StatelessWidget {
-  String? parkImage, parkName;
-  double? rating, distance;
+class ParkCards extends StatelessWidget {
+  String parkImage, parkName, city, state;
+  double? distance;
 
-  BenchCards({
+  ParkCards({
     Key? key,
-    this.parkImage,
-    this.parkName,
+    required this.parkImage,
+    required this.parkName,
     this.distance,
-    this.rating,
+    required this.city,
+    required this.state,
   }) : super(key: key);
 
   @override
@@ -149,10 +150,7 @@ class BenchCards extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            kMapPin,
-            height: 41,
-          ),
+          Image.asset(kMapPin, height: 41),
           Container(
             width: 109,
             margin: const EdgeInsets.only(
@@ -170,8 +168,8 @@ class BenchCards extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  child: Image.asset(
-                    parkImage!,
+                  child: CachedNetworkImage(
+                    imageUrl: parkImage,
                     height: 78,
                     fit: BoxFit.cover,
                   ),
@@ -186,54 +184,19 @@ class BenchCards extends StatelessWidget {
                     children: [
                       MyText(
                         paddingBottom: 8,
-                        text: '$parkName',
+                        text: parkName,
                         size: 14,
                         maxLines: 1,
                         overFlow: TextOverflow.ellipsis,
                         weight: FontWeight.w500,
                       ),
-                      Row(
-                        children: [
-                          MyText(
-                            text: rating.toString(),
-                            size: 11,
-                            paddingRight: 3.0,
-                            weight: FontWeight.w500,
-                          ),
-                          Expanded(
-                            child: RatingBar(
-                              initialRating: 5,
-                              minRating: 1,
-                              itemSize: 8.0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: true,
-                              itemCount: 5,
-                              itemPadding: const EdgeInsets.symmetric(
-                                horizontal: 1.0,
-                              ),
-                              unratedColor: const Color(0xffCCCFD9),
-                              glow: false,
-                              onRatingUpdate: (rating) {
-                                print(rating);
-                              },
-                              ratingWidget: RatingWidget(
-                                empty: Image.asset(
-                                  kRatingStar,
-                                  height: 16.20,
-                                  color: const Color(0xffCCCFD9),
-                                ),
-                                full: Image.asset(
-                                  kRatingStar,
-                                  height: 16.20,
-                                ),
-                                half: Image.asset(
-                                  kRatingStar,
-                                  height: 16.20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      MyText(
+                        text: "$city, $state",
+                        size: 11,
+                        maxLines: 2,
+                        paddingRight: 3.0,
+                        color: Colors.grey,
+                        weight: FontWeight.w500,
                       ),
                     ],
                   ),
