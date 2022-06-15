@@ -19,7 +19,7 @@ class ReportParkBench extends StatelessWidget {
         init: ReportParkBenchController(),
         builder: (controller) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             appBar: CustomAppBar(title: 'Report Park Bench'),
             body: Column(
               children: [

@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
-import 'package:park_benching/model/park_bench_model/park_bench_modek.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ParkBenchController extends GetxController {
   String? uid = Get.parameters['uid'];
+  final box = GetStorage();
+  double userLatitude = 0.0, userLongitude = 0.0;
   int? currentIndex = 0;
 
   void selectedIndex(int index) {
@@ -10,33 +12,15 @@ class ParkBenchController extends GetxController {
     update();
   }
 
-  final List<ParkBenchModel> dummyBenches = [
-    ParkBenchModel(
-      parkImage: 'assets/images/dummy_bench.png',
-      parkName: 'Shiraj Park',
-      rating: 5.0,
-      distance: 300,
-    ),
-    ParkBenchModel(
-      parkImage: 'assets/images/unsplash_rpI9UrPcRTI.png',
-      parkName: 'Aikatan park',
-      rating: 4.0,
-      distance: 500,
-    ),
-    ParkBenchModel(
-      parkImage: 'assets/images/unsplash_RF6ihUs5ShA.png',
-      parkName: 'Fermont Park',
-      rating: 4.0,
-      distance: 2000,
-    ),
-    ParkBenchModel(
-      parkImage: 'assets/images/unsplash_pNaljhHpssA.png',
-      parkName: 'Redwood Park',
-      rating: 3.0,
-      distance: 3500,
-    ),
-  ];
+  @override
+  void onInit() {
+    Map userLocation = box.read("userLocation");
+    userLatitude = userLocation["latitude"];
+    userLongitude = userLocation["longitude"];
+    super.onInit();
+  }
 
-  List<ParkBenchModel> get getDummyBenches => dummyBenches;
+
+
 
 }

@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:park_benching/controller/park_controller.dart';
 import 'package:park_benching/routes/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'constant/color.dart';
 import 'constant/common.dart';
 import 'constant/images.dart';
@@ -53,6 +53,17 @@ class Parks extends StatelessWidget {
                       builder: (context, pSnapshot) {
                         if (!pSnapshot.hasData) return const Center(child: CircularProgressIndicator());
                         List<DocumentSnapshot> parkList = pSnapshot.data!.docs;
+                        if (controller.currentIndex == 0) {
+                          parkList = parkList
+                              .where((element) =>
+                                  calculateDistance(
+                                      lat1: controller.userLatitude,
+                                      lon1: controller.userLongitude,
+                                      lat2: element["parkLocation"].latitude,
+                                      lon2: element["parkLocation"].longitude) >
+                                  5)
+                              .toList();
+                        }
 
                         return ListView.builder(
                           itemCount: parkList.length,
@@ -64,7 +75,13 @@ class Parks extends StatelessWidget {
                               parkName: parkList[index]["parkName"],
                               city: parkList[index]["city"],
                               state: parkList[index]["state"],
-                              distance: 299,
+                              lat: parkList[index]["parkLocation"].latitude,
+                              long: parkList[index]["parkLocation"].longitude,
+                              distance: meterIntoKm(calculateDistance(
+                                  lat1: controller.userLatitude,
+                                  lon1: controller.userLongitude,
+                                  lat2: parkList[index]["parkLocation"].latitude,
+                                  lon2: parkList[index]["parkLocation"].longitude)),
                             );
                           },
                         );
@@ -130,23 +147,23 @@ class Parks extends StatelessWidget {
 // ignore: must_be_immutable
 class ParkCards extends StatelessWidget {
   String parkImage, parkName, city, state;
-  double? distance;
-
+  String distance;
+  double lat, long;
   ParkCards({
     Key? key,
     required this.parkImage,
     required this.parkName,
-    this.distance,
+    required this.distance,
     required this.city,
     required this.state,
+    required this.lat,
+    required this.long,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 30,
-      ),
+      padding: const EdgeInsets.only(bottom: 30),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -204,9 +221,7 @@ class ParkCards extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(
-            width: 15,
-          ),
+          const SizedBox(width: 15),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +235,7 @@ class ParkCards extends StatelessWidget {
                       color: kGreyColor,
                     ),
                     MyText(
-                      text: distance! < 1000 ? '${meterIntoKm(distance!)}m' : '${meterIntoKm(distance!)}km',
+                      text: distance,
                       size: 16,
                       weight: FontWeight.w600,
                     ),
@@ -228,13 +243,18 @@ class ParkCards extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Image.asset(
-                    'assets/images/route_with_bg.png',
-                    height: 35,
+                  child: GestureDetector(
+                    onTap: () {
+                      launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=AIzaSyCKmGnNcCM5Jy8ol1QeMsWbICnlPvAgGtA&query=$lat,$long"));
+                    },
+                    child: Image.asset(
+                      'assets/images/route_with_bg.png',
+                      height: 35,
+                    ),
                   ),
                 ),
                 MyText(
-                  text: 'Reviews',
+                  text: 'All Benches',
                   size: 14,
                   weight: FontWeight.w500,
                   color: kYellowColor,

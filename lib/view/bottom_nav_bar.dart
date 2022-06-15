@@ -117,7 +117,7 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: CustomBottomNavBarItem(
-                      onTap: () => Get.toNamed(AppLinks.reportParkBench),
+                      onTap: () => Get.toNamed(AppLinks.reportParkBench, parameters: {"uid": controller.uid!}),
                       index: 2,
                       icon: kReportIcon,
                       iconSize: 22,

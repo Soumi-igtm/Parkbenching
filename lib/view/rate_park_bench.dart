@@ -20,7 +20,7 @@ class RateParkBench extends StatelessWidget {
         init: RateParkBenchController(),
         builder: (controller) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             appBar: CustomAppBar(title: 'Rate Park Bench'),
             body: Column(
               children: [

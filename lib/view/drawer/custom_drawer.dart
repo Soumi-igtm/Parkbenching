@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:park_benching/controller/bottom_nav_controller.dart';
 import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/images.dart';
+import 'package:park_benching/view/report_history.dart';
 import 'package:park_benching/view/support/support.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 
@@ -39,7 +40,7 @@ class CustomDrawer extends StatelessWidget {
                               imageUrl: controller.userSnap["image"],
                               placeholder: (context, s) => Image.asset(kProfileIcon),
                               height: 40,
-                              fit: BoxFit.fitHeight,
+                              fit: BoxFit.cover,
                             ),
                           ),
                     title: MyText(
@@ -68,7 +69,7 @@ class CustomDrawer extends StatelessWidget {
                     title: 'Bench History',
                   ),
                   DrawerTiles(
-                    onTap: () {},
+                    onTap: () => Get.to(() => ReportHistory(uid: controller.uid!)),
                     icon: kReportHistoryIcon,
                     iconSize: 25.0,
                     title: 'Report History',

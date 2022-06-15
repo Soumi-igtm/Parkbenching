@@ -7,7 +7,7 @@ import 'package:park_benching/view/parks.dart';
 import 'package:park_benching/view/rate_park_bench.dart';
 import 'package:park_benching/view/report_park_bench/report/report.dart';
 import 'package:park_benching/view/report_park_bench.dart';
-import 'package:park_benching/view/send_location/send_location.dart';
+import 'package:park_benching/view/send_location.dart';
 import 'package:park_benching/view/top_rated_park_benches.dart';
 import 'package:park_benching/view/login_sign_up.dart';
 

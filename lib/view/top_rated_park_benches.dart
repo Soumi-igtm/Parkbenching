@@ -70,7 +70,13 @@ class TopRatedParkBenches extends StatelessWidget {
                                 parkImage: benchData[index]["images"][0],
                                 parkName: benchData[index]["parkName"],
                                 rating: (benchData[index]["rating"] / benchData[index]["ratingCount"]).toDouble(),
-                                distance: 200,
+                                distance: meterIntoKm(calculateDistance(
+                                    lat1: controller.userLatitude,
+                                    lon1: controller.userLongitude,
+                                    lat2: benchData[index]["parkLocation"].latitude,
+                                    lon2: benchData[index]["parkLocation"].longitude)),
+                                lat: benchData[index]["parkLocation"].latitude,
+                                long: benchData[index]["parkLocation"].longitude,
                               );
                             });
                       }),
@@ -134,9 +140,9 @@ class TopRatedParkBenches extends StatelessWidget {
 
 // ignore: must_be_immutable
 class BenchCards extends StatelessWidget {
-  String parkImage, parkName, bid;
-  double rating, distance;
-
+  String parkImage, parkName, bid, distance;
+  double rating;
+  double lat, long;
   BenchCards({
     Key? key,
     required this.bid,
@@ -144,6 +150,8 @@ class BenchCards extends StatelessWidget {
     required this.parkName,
     required this.distance,
     required this.rating,
+    required this.lat,
+    required this.long,
   }) : super(key: key);
 
   @override
@@ -260,7 +268,7 @@ class BenchCards extends StatelessWidget {
                       color: kGreyColor,
                     ),
                     MyText(
-                      text: distance < 1000 ? '${meterIntoKm(distance)}m' : '${meterIntoKm(distance)}km',
+                      text: distance,
                       size: 16,
                       weight: FontWeight.w600,
                     ),
@@ -287,16 +295,6 @@ class BenchCards extends StatelessWidget {
     );
   }
 
-  meterIntoKm(double meter) {
-    meter = distance;
-    if (meter < 1000) {
-      int? distanceInMeter = meter.toInt();
-      return distanceInMeter;
-    } else {
-      meter = meter / 1000;
-      return meter;
-    }
-  }
 
   void reviewSheet(String bid) {
     Get.bottomSheet(
@@ -333,7 +331,7 @@ class BenchCards extends StatelessWidget {
                                       imageUrl: uData["image"],
                                       placeholder: (context, s) => Image.asset(kProfileIcon),
                                       height: 40,
-                                      fit: BoxFit.fitHeight,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                             title: MyText(text: uData["name"], size: 16, maxLines: 1, overFlow: TextOverflow.ellipsis, weight: FontWeight.bold),
