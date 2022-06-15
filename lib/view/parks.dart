@@ -1,16 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:park_benching/controller/park_controller.dart';
+import 'package:park_benching/view/add_park.dart';
 
-import '../constant/color.dart';
-import '../constant/images.dart';
-import '../widget/custom_app_bar.dart';
-import '../widget/my_text.dart';
+import 'constant/color.dart';
+import 'constant/common.dart';
+import 'constant/images.dart';
+import 'widget/custom_app_bar.dart';
+import 'widget/my_text.dart';
 
-class ParkBenches extends StatelessWidget {
-  const ParkBenches({Key? key}) : super(key: key);
+class Parks extends StatelessWidget {
+  const Parks({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +21,15 @@ class ParkBenches extends StatelessWidget {
       init: ParkBenchController(),
       builder: (controller) {
         return Scaffold(
-          appBar: CustomAppBar(
-            title: 'Park Benches',
+          appBar: CustomAppBar(title: 'Parks'),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: TextButton(
+            onPressed: () => Get.to(() => AddPark(uid: controller.uid!)),
+            style: TextButton.styleFrom(backgroundColor: kTertiaryColor, shape: const StadiumBorder()),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
+              child: MyText(text: "Add park", color: kWhiteColor, weight: FontWeight.bold),
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -29,7 +39,7 @@ class ParkBenches extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     radiusButtons(
-                      'Radius (5km)',
+                      'Near me (5km)',
                       0,
                     ),
                     radiusButtons(
@@ -38,61 +48,27 @@ class ParkBenches extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 Expanded(
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                    ),
-                    children: controller.currentIndex == 0
-                        ? controller.getDummyBenches
-                        .where(
-                          (element) => element.distance! < 1000,
-                    )
-                        .map((e) {
-                      return BenchCards(
-                        parkImage: e.parkImage,
-                        parkName: e.parkName,
-                        rating: e.rating,
-                        distance: e.distance,
-                      );
-                    }).toList()
-                        : controller.currentIndex == 1
-                        ? controller.getDummyBenches
-                        .where(
-                          (element) => element.distance! < 10000,
-                    )
-                        .map((e) {
-                      return BenchCards(
-                        parkImage: e.parkImage,
-                        parkName: e.parkName,
-                        rating: e.rating,
-                        distance: e.distance,
-                      );
-                    }).toList()
-                        : controller.currentIndex == 3
-                        ? controller.getDummyBenches
-                        .where(
-                          (element) => element.distance! < 10000,
-                    )
-                        .map((e) {
-                      return BenchCards(
-                        parkImage: e.parkImage,
-                        parkName: e.parkName,
-                        rating: e.rating,
-                        distance: e.distance,
-                      );
-                    }).toList()
-                        : controller.getDummyBenches.map((e) {
-                      return BenchCards(
-                        parkImage: e.parkImage,
-                        parkName: e.parkName,
-                        rating: e.rating,
-                        distance: e.distance,
-                      );
-                    }).toList(),
-                  ),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: parksCollection.where("active", isEqualTo: true).snapshots(),
+                      builder: (context, pSnapshot) {
+                        if (!pSnapshot.hasData) return const Center(child: CircularProgressIndicator());
+                        List<DocumentSnapshot> parkList = pSnapshot.data!.docs;
+
+                        return ListView.builder(
+                          itemCount: parkList.length,
+                          physics: const BouncingScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          itemBuilder: (BuildContext context, int index) {
+                            return BenchCards(
+                              parkImage: parkList[index]["parkImage"],
+                              parkName: parkList[index]["parkName"],
+                              rating: parkList[index]["rating"],
+                              distance: parkList[index]["distance"],
+                            );
+                          },
+                        );
+                      }),
                 ),
               ],
             ),
@@ -116,26 +92,22 @@ class ParkBenches extends StatelessWidget {
                     left: index == 1
                         ? 3
                         : index == 2
-                        ? 7
-                        : 0,
+                            ? 7
+                            : 0,
                     right: index == 0
                         ? 7
                         : index == 1
-                        ? 3
-                        : 0,
+                            ? 3
+                            : 0,
                   ),
                   height: 45,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
-                      color: controller.currentIndex == index
-                          ? kYellowColor
-                          : kSecondaryColor,
+                      color: controller.currentIndex == index ? kYellowColor : kSecondaryColor,
                       width: 1.0,
                     ),
-                    color: controller.currentIndex == index
-                        ? kYellowColor.withOpacity(0.05)
-                        : kSecondaryColor.withOpacity(0.05),
+                    color: controller.currentIndex == index ? kYellowColor.withOpacity(0.05) : kSecondaryColor.withOpacity(0.05),
                   ),
                   child: Center(
                     child: MyText(
@@ -285,9 +257,7 @@ class BenchCards extends StatelessWidget {
                       color: kGreyColor,
                     ),
                     MyText(
-                      text: distance! < 1000
-                          ? '${meterIntoKm(distance!)}m'
-                          : '${meterIntoKm(distance!)}km',
+                      text: distance! < 1000 ? '${meterIntoKm(distance!)}m' : '${meterIntoKm(distance!)}km',
                       size: 16,
                       weight: FontWeight.w600,
                     ),
@@ -325,6 +295,3 @@ class BenchCards extends StatelessWidget {
     }
   }
 }
-
-
-

@@ -98,26 +98,18 @@ class BottomNavBar extends StatelessWidget {
                 ),
                 BottomNavigationBarItem(
                   icon: CustomBottomNavBarItem(
-                    onTap: () => Get.toNamed(AppLinks.parkbenches),
+                    onTap: () => Get.toNamed(AppLinks.parks, parameters: {"uid": controller.uid!}),
                     index: 1,
                     icon: kParkIcon,
                     iconSize: 20,
                   ),
                   label: 'Parks',
                 ),
-                BottomNavigationBarItem(
-                  icon: CustomBottomNavBarItem(
-                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
-                    index: 2,
-                    icon: kBenchIcon,
-                    iconSize: 20,
-                  ),
-                  label: 'Top Parks',
-                ),
+
                 BottomNavigationBarItem(
                   icon: CustomBottomNavBarItem(
                     onTap: () => Get.toNamed(AppLinks.reportParkBench),
-                    index: 3,
+                    index: 2,
                     icon: kReportIcon,
                     iconSize: 22,
                   ),
@@ -126,11 +118,20 @@ class BottomNavBar extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: CustomBottomNavBarItem(
                     onTap: () => Get.toNamed(AppLinks.rateParkBench, parameters: {"uid": controller.uid!}),
-                    index: 4,
+                    index: 3,
                     icon: kRateIcon,
                     iconSize: 17,
                   ),
                   label: 'Rate',
+                ),
+                BottomNavigationBarItem(
+                  icon: CustomBottomNavBarItem(
+                    onTap: () => Get.toNamed(AppLinks.topRatedParkBenches),
+                    index: 4,
+                    icon: kTopRatedIcon,
+                    iconSize: 20,
+                  ),
+                  label: 'Top',
                 ),
               ],
             ),

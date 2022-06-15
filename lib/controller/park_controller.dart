@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:park_benching/model/park_bench_model/park_bench_modek.dart';
 
 class ParkBenchController extends GetxController {
+  String? uid = Get.parameters['uid'];
   int? currentIndex = 0;
 
   void selectedIndex(int index) {

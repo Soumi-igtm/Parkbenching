@@ -2,10 +2,10 @@ import 'package:get/get.dart';
 
 import 'package:park_benching/view/launch/intro.dart';
 import 'package:park_benching/view/launch/splash_screen.dart';
-import 'package:park_benching/view/park_benches/park_benches.dart';
+import 'package:park_benching/view/parks.dart';
 import 'package:park_benching/view/rate_park_bench.dart';
 import 'package:park_benching/view/report_park_bench/report/report.dart';
-import 'package:park_benching/view/report_park_bench/report_park_bench.dart';
+import 'package:park_benching/view/report_park_bench.dart';
 import 'package:park_benching/view/send_location/send_location.dart';
 import 'package:park_benching/view/top_rated_park_benches/top_rated_park_benches.dart';
 import 'package:park_benching/view/login_sign_up.dart';
@@ -33,12 +33,10 @@ class AppRoutes {
     GetPage(
       name: AppLinks.bottomNavBar,
       page: () => const BottomNavBar(),
-      //binding: BottomNavBinding(),
     ),
     GetPage(
       name: AppLinks.reportParkBench,
       page: () => const ReportParkBench(),
-      binding: ReportParkBenchBinding(),
     ),
     GetPage(
       name: AppLinks.report,
@@ -61,8 +59,8 @@ class AppRoutes {
     ),
 
     GetPage(
-      name: AppLinks.parkbenches,
-      page: () => const ParkBenches(),
+      name: AppLinks.parks,
+      page: () => const Parks(),
     ),
   ];
 }
@@ -77,6 +75,6 @@ class AppLinks {
   static const rateParkBench = '/rate_park_bench';
   static const sendLocation = '/send_location';
   static const topRatedParkBenches = '/top_rated_park_benches';
-  static const parkbenches = '/park_benches';
+  static const parks = '/parks';
 
 }

@@ -57,30 +57,30 @@ class RateParkBench extends GetView<RateParkBenchController> {
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
               children: [
-                Form(
-                  key: controller.formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
-                    child: TextFormField(
-                        autofocus: false,
-                        controller: controller.benchNameController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: benchValidator,
-                        onSaved: (value) {
-                          controller.benchNameController.text = value!;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.event_seat),
-                          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                          hintText: "Bench name",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        )),
-                  ),
-                ),
+                // Form(
+                //   key: controller.formKey,
+                //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                //   child: Padding(
+                //     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
+                //     child: TextFormField(
+                //         autofocus: false,
+                //         controller: controller.benchNameController,
+                //         keyboardType: TextInputType.emailAddress,
+                //         validator: benchValidator,
+                //         onSaved: (value) {
+                //           controller.benchNameController.text = value!;
+                //         },
+                //         textInputAction: TextInputAction.next,
+                //         decoration: InputDecoration(
+                //           prefixIcon: const Icon(Icons.event_seat),
+                //           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                //           hintText: "Bench name",
+                //           border: OutlineInputBorder(
+                //             borderRadius: BorderRadius.circular(10),
+                //           ),
+                //         )),
+                //   ),
+                // ),
                 Row(
                   children: [
                     Expanded(

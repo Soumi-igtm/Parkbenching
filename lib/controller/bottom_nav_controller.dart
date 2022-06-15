@@ -8,7 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/view/constant/color.dart';
 import 'package:park_benching/view/constant/common.dart';
 import 'package:rxdart/rxdart.dart';
 import '../view/constant/images.dart';

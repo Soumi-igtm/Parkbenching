@@ -29,26 +29,11 @@ class LoginSignupBinding extends Bindings {
   }
 }
 
-class BottomNavBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<BottomNavController>(() => BottomNavController());
-  }
-}
-
 class RateParkBenchBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<RateParkBenchController>(() => RateParkBenchController());
   }
-}
-
-class ReportParkBenchBinding extends Bindings{
-  @override
-  void dependencies() {
-    Get.lazyPut<ReportParkBenchController>(() => ReportParkBenchController());
-  }
-
 }
 
 class SendLocationBinding extends Bindings{
