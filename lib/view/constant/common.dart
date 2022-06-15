@@ -29,7 +29,7 @@ String meterIntoKm(double meter) {
     int? distanceInMeter = meter.toInt();
     return "${distanceInMeter}m";
   } else {
-    meter = meter / 1000;
-    return "${meter}Km";
+    int? distanceInMeter = (meter / 1000).floor();
+    return "${distanceInMeter}Km";
   }
 }

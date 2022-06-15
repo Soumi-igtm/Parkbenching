@@ -77,6 +77,8 @@ class Parks extends StatelessWidget {
                               state: parkList[index]["state"],
                               lat: parkList[index]["parkLocation"].latitude,
                               long: parkList[index]["parkLocation"].longitude,
+                              ulat: controller.userLatitude,
+                              ulong: controller.userLongitude,
                               distance: meterIntoKm(calculateDistance(
                                   lat1: controller.userLatitude,
                                   lon1: controller.userLongitude,
@@ -148,7 +150,7 @@ class Parks extends StatelessWidget {
 class ParkCards extends StatelessWidget {
   String parkImage, parkName, city, state;
   String distance;
-  double lat, long;
+  double lat, long, ulat, ulong;
   ParkCards({
     Key? key,
     required this.parkImage,
@@ -158,6 +160,8 @@ class ParkCards extends StatelessWidget {
     required this.state,
     required this.lat,
     required this.long,
+    required this.ulat,
+    required this.ulong,
   }) : super(key: key);
 
   @override
@@ -245,7 +249,8 @@ class ParkCards extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   child: GestureDetector(
                     onTap: () {
-                      launchUrl(Uri.parse("https://www.google.com/maps/dir/?api=AIzaSyCKmGnNcCM5Jy8ol1QeMsWbICnlPvAgGtA&query=$lat,$long"));
+                      launchUrl(Uri.parse(
+                          "https://www.google.com/maps/dir/?api=AIzaSyCKmGnNcCM5Jy8ol1QeMsWbICnlPvAgGtA&origin=$ulat,$ulong&destination=$lat,$long"));
                     },
                     child: Image.asset(
                       'assets/images/route_with_bg.png',

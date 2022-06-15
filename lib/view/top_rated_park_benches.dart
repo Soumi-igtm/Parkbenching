@@ -10,6 +10,7 @@ import 'package:park_benching/view/constant/images.dart';
 import 'package:park_benching/view/widget/custom_app_bar.dart';
 import 'package:park_benching/view/widget/my_text.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TopRatedParkBenches extends StatelessWidget {
   const TopRatedParkBenches({Key? key}) : super(key: key);
@@ -73,10 +74,12 @@ class TopRatedParkBenches extends StatelessWidget {
                                 distance: meterIntoKm(calculateDistance(
                                     lat1: controller.userLatitude,
                                     lon1: controller.userLongitude,
-                                    lat2: benchData[index]["parkLocation"].latitude,
-                                    lon2: benchData[index]["parkLocation"].longitude)),
-                                lat: benchData[index]["parkLocation"].latitude,
-                                long: benchData[index]["parkLocation"].longitude,
+                                    lat2: benchData[index]["location"]["geopoint"].latitude,
+                                    lon2: benchData[index]["location"]["geopoint"].longitude)),
+                                lat: benchData[index]["location"]["geopoint"].latitude,
+                                long: benchData[index]["location"]["geopoint"].longitude,
+                                ulat: controller.userLatitude,
+                                ulong: controller.userLongitude,
                               );
                             });
                       }),
@@ -142,7 +145,7 @@ class TopRatedParkBenches extends StatelessWidget {
 class BenchCards extends StatelessWidget {
   String parkImage, parkName, bid, distance;
   double rating;
-  double lat, long;
+  double lat, long, ulat, ulong;
   BenchCards({
     Key? key,
     required this.bid,
@@ -152,6 +155,8 @@ class BenchCards extends StatelessWidget {
     required this.rating,
     required this.lat,
     required this.long,
+    required this.ulat,
+    required this.ulong,
   }) : super(key: key);
 
   @override
@@ -276,7 +281,12 @@ class BenchCards extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Image.asset('assets/images/route_with_bg.png', height: 35),
+                  child: GestureDetector(
+                      onTap: () {
+                        launchUrl(Uri.parse(
+                            "https://www.google.com/maps/dir/?api=AIzaSyCKmGnNcCM5Jy8ol1QeMsWbICnlPvAgGtA&origin=$ulat,$ulong&destination=$lat,$long"));
+                      },
+                      child: Image.asset('assets/images/route_with_bg.png', height: 35)),
                 ),
                 GestureDetector(
                   onTap: () => reviewSheet(bid),
