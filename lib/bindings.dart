@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
-import 'package:park_benching/controller/add_park_controller.dart';
-import 'package:park_benching/controller/rate_park_bench_controller.dart';
-
+import 'controller/add_park_controller.dart';
+import 'controller/rate_park_bench_controller.dart';
 import 'controller/add_bench_controller.dart';
 import 'controller/intro_controller.dart';
 import 'controller/login_signup_controller.dart';

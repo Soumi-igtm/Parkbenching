@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/bottom_nav_controller.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/report_history.dart';
-import 'package:park_benching/view/support/support.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/controller/bottom_nav_controller.dart';
+import 'package:parkbenching/resources/auth_methods.dart';
+import 'package:parkbenching/view/bench_history.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/report_history.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 
 import '../../routes/routes.dart';
+import '../support.dart';
 import '../view_profile.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -25,7 +27,7 @@ class CustomDrawer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  searchBox(),
+                 // searchBox(),
                   ListTile(
                     onTap: () => Get.to(() => ViewProfile(uid: controller.uid!)),
                     leading: controller.userSnap["image"].isEmpty
@@ -63,7 +65,7 @@ class CustomDrawer extends StatelessWidget {
                     height: 20,
                   ),
                   DrawerTiles(
-                    onTap: () {},
+                    onTap: () => Get.to(() => BenchHistory(uid: controller.uid!)),
                     icon: kBenchIcon,
                     iconSize: 24.0,
                     title: 'Bench History',
@@ -75,14 +77,19 @@ class CustomDrawer extends StatelessWidget {
                     title: 'Report History',
                   ),
                   DrawerTiles(
-                    onTap: () => Get.toNamed(AppLinks.sendLocation),
-                    icon: kSendIcon,
-                    title: 'Send to a friend',
+                    onTap: () => Get.toNamed(AppLinks.parks, parameters: {"uid": controller.uid!}),
+                    icon: kParkIcon,
+                    title: 'Parks',
                   ),
                   DrawerTiles(
                     onTap: () => Get.to(() => const Support()),
                     icon: kSupportIcon,
                     title: 'Support',
+                  ),
+                  DrawerTiles(
+                    onTap: () => AuthMethods.instance.signOut(),
+                    icon: kSignOutIcon,
+                    title: 'Sign out',
                   ),
                 ],
               ),

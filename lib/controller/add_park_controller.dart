@@ -71,13 +71,11 @@ class AddParkController extends GetxController {
 
     List<Placemark> placeMarks = await placemarkFromCoordinates(currentPosition.latitude, currentPosition.longitude);
 
-    print(placeMarks.first);
-
     await parksCollection.add({
       "active": false,
       "uid": uid!,
       "parkName": parkNameController.text,
-      "parkNameSearch": parkNameController.text, // need to do
+      "parkNameSearch": List.generate(parkNameController.text.length, (int index) => parkNameController.text.substring(0, index + 1).toLowerCase()),
       "parkLocation": GeoPoint(currentPosition.latitude, currentPosition.longitude),
       "description": parkDescriptionController.text,
       "images": [],
@@ -123,6 +121,7 @@ class AddParkController extends GetxController {
 
   @override
   void onClose() {
+    photos.clear();
     parkNameController.dispose();
     parkDescriptionController.dispose();
     super.onClose();

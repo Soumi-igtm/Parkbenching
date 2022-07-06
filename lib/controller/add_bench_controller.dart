@@ -34,8 +34,8 @@ class AddBenchController extends GetxController {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
-
-  final TextEditingController reviewController = TextEditingController();
+  String generatedBenchName = "";
+  final TextEditingController reviewController = TextEditingController(), benchNameController = TextEditingController();
 
   @override
   void onInit() {
@@ -53,6 +53,10 @@ class AddBenchController extends GetxController {
         CameraPosition(target: LatLng(userLocation["latitude"], userLocation["longitude"]), zoom: 19.151926040649414),
       ),
     );
+
+    QuerySnapshot benches = await benchesCollection.get();
+    generatedBenchName = "Bench #${benches.docs.length}";
+    benchNameController.text = generatedBenchName;
   }
 
   Future pickImage({bool fromGallery = false}) async {
@@ -79,6 +83,9 @@ class AddBenchController extends GetxController {
     }
 
     customToast("Please wait...");
+
+    generatedBenchName = benchNameController.text.isEmpty ? generatedBenchName : benchNameController.text;
+
     GeoFirePoint myLocation = geo.point(latitude: currentPosition.latitude, longitude: currentPosition.longitude);
     await benchesCollection.add({
       "uid": uid!,
@@ -89,11 +96,13 @@ class AddBenchController extends GetxController {
       "reachability": reachability,
       "equipment": equipment,
       "images": [],
-      "parkID": selectParkID,
-      "parkName": selectedParkName.value,
+      "parkID": "",
+      "benchName": generatedBenchName,
+      "benchNameSearch": List.generate(generatedBenchName.length, (int index) => generatedBenchName.substring(0, index + 1).toLowerCase()),
       "rating": selectedRating,
       "ratingCount": 1,
-      "location": myLocation.data
+      "location": myLocation.data,
+      "addedOn": DateTime.now(),
     }).then((value) async {
       List photosUrl = [];
 
@@ -122,7 +131,7 @@ class AddBenchController extends GetxController {
         onWillPop: () => Future.value(false),
         title: "Added",
         titleStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-        content: MyText(text: "Thanks for adding this bench. Your app is now visible worldwide"),
+        content: MyText(text: "Thanks for adding this bench. This bench is now visible worldwide"),
         confirm: ElevatedButton(
             onPressed: () => Get.offNamed(AppLinks.bottomNavBar, parameters: {"uid": uid!}),
             style: ElevatedButton.styleFrom(primary: kTertiaryColor),
@@ -135,57 +144,68 @@ class AddBenchController extends GetxController {
     });
   }
 
-  openParkList() {
-    Get.bottomSheet(
-      Padding(
-        padding: const EdgeInsets.only(top: 30.0),
-        child: Column(
-          children: [
-            ListTile(
-              title: MyText(text: "Select Park", weight: FontWeight.bold, size: 20),
-              trailing: IconButton(
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.close, color: kGreyColor),
-              ),
-            ),
-            const Divider(),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: parksCollection.where("active", isEqualTo: true).orderBy("parkName").snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
-                    List<DocumentSnapshot> parkData = snapshot.data!.docs;
-
-                    return ListView.builder(
-                        itemCount: parkData.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              selectParkID = parkData[index].id;
-                              selectedParkName.value = parkData[index]["parkName"];
-                              Get.back();
-                            },
-                            title: MyText(
-                              text: parkData[index]["parkName"],
-                              color: Colors.black,
-                            ),
-                          );
-                        });
-                  }),
-            ),
-          ],
-        ),
-      ),
-      isScrollControlled: true,
-      isDismissible: true,
-      enableDrag: false,
-      backgroundColor: kWhiteColor,
-    );
-  }
+  // openParkList() {
+  //   Get.bottomSheet(
+  //     Padding(
+  //       padding: const EdgeInsets.only(top: 30.0),
+  //       child: Column(
+  //         children: [
+  //           ListTile(
+  //             title: MyText(text: "Select Park", weight: FontWeight.bold, size: 20),
+  //             trailing: IconButton(
+  //               onPressed: () => Get.back(),
+  //               icon: const Icon(Icons.close, color: kGreyColor),
+  //             ),
+  //           ),
+  //           const Divider(),
+  //           Expanded(
+  //             child: StreamBuilder<QuerySnapshot>(
+  //                 stream: parksCollection.where("active", isEqualTo: true).orderBy("parkName").snapshots(),
+  //                 builder: (context, snapshot) {
+  //                   if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+  //                   List<DocumentSnapshot> parkData = snapshot.data!.docs;
+  //
+  //                   return ListView.builder(
+  //                       itemCount: parkData.length,
+  //                       itemBuilder: (context, index) {
+  //                         return ListTile(
+  //                           onTap: () async {
+  //                             selectParkID = parkData[index].id;
+  //                             selectedParkName.value = parkData[index]["parkName"];
+  //                             final GoogleMapController googleMapController = await mapController.future;
+  //
+  //                             // animate map to current user location
+  //                             googleMapController.animateCamera(
+  //                               CameraUpdate.newCameraPosition(
+  //                                 CameraPosition(
+  //                                     target: LatLng(parkData[index]["parkLocation"].latitude, parkData[index]["parkLocation"].longitude),
+  //                                     zoom: 19.151926040649414),
+  //                               ),
+  //                             );
+  //                             Get.back();
+  //                           },
+  //                           title: MyText(
+  //                             text: parkData[index]["parkName"],
+  //                             color: Colors.black,
+  //                           ),
+  //                         );
+  //                       });
+  //                 }),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     isScrollControlled: true,
+  //     isDismissible: true,
+  //     enableDrag: false,
+  //     backgroundColor: kWhiteColor,
+  //   );
+  // }
 
   @override
   void onClose() {
     reviewController.dispose();
+    benchNameController.dispose();
     super.onClose();
   }
 }

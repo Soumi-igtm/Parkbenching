@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/view/constant/app_styling.dart';
+import 'package:parkbenching/routes/routes.dart';
+import 'package:parkbenching/view/constant/app_styling.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

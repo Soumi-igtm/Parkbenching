@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/intro_controller.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/widget/custom_bottom_app_bar.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/controller/intro_controller.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/widget/custom_bottom_app_bar.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 
 class Intro extends GetView<IntroController> {
   const Intro({Key? key}) : super(key: key);
@@ -36,7 +36,7 @@ class Intro extends GetView<IntroController> {
             ),
           ),
           MyText(
-            text: 'Present the new Parkbenching',
+            text: 'Present the new BenchNearby',
             paddingTop: 30,
           ),
           MyText(
@@ -53,7 +53,7 @@ class Intro extends GetView<IntroController> {
             'Report park benches',
           ),
           features(
-            'Send your own (park bench ) locations to be picked up or to meet with freinds',
+            'Send your own bench locations to be picked up or to meet with friends',
           ),
           features(
             'View top rated park benches',

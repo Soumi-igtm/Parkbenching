@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "424066461232",
-    "project_id": "parkbenching",
-    "storage_bucket": "parkbenching.appspot.com"
+    "project_number": "295721615628",
+    "project_id": "apponauten-6e326",
+    "storage_bucket": "apponauten-6e326.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:424066461232:android:cf1be7d1ae9f55087307f5",
+        "mobilesdk_app_id": "1:295721615628:android:703616e8e7f4fc5c318929",
         "android_client_info": {
           "package_name": "com.shaderbytes.parkbenching"
         }
       },
       "oauth_client": [
         {
-          "client_id": "424066461232-d98iotes9juvur79nr368i3ejma6ein6.apps.googleusercontent.com",
+          "client_id": "295721615628-u8b77kf9nil335331em2ovpqssj34dv6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.shaderbytes.parkbenching",
-            "certificate_hash": "0931580e280e11d92c57a280cfba32509451d8d2"
+            "certificate_hash": "a9d13c988b777db80eca900e65fd2a36271b6f2f"
           }
         },
         {
-          "client_id": "424066461232-o3dm2hf606n7rvl7cci4dtd9p8d978cq.apps.googleusercontent.com",
+          "client_id": "295721615628-3qtq6hm1srn87emhkk5p09lg9j0hgjpl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCKmGnNcCM5Jy8ol1QeMsWbICnlPvAgGtA"
+          "current_key": "AIzaSyBIQGzDA0x8mA3_r5L812cYX5ui3uhWoeM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "424066461232-o3dm2hf606n7rvl7cci4dtd9p8d978cq.apps.googleusercontent.com",
+              "client_id": "295721615628-3qtq6hm1srn87emhkk5p09lg9j0hgjpl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

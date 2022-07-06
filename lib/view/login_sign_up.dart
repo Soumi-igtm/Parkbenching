@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/login_signup_controller.dart';
-import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/validators.dart';
-import 'package:park_benching/view/widget/my_button.dart';
-import 'package:park_benching/view/widget/my_text.dart';
-
+import 'package:parkbenching/controller/login_signup_controller.dart';
+import 'package:parkbenching/routes/routes.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/constant/validators.dart';
+import 'package:parkbenching/view/widget/my_button.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 
 class LoginSignUp extends GetView<LoginSignupController> {
   const LoginSignUp({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +22,24 @@ class LoginSignUp extends GetView<LoginSignupController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const SizedBox(height: 30),
+              Center(child: Image.asset("assets/images/logo.png", width: context.width / 2)),
               MyText(
-                paddingTop: 48,
+                text: 'BenchNearby',
+                size: 30,
+                align: TextAlign.center,
+                weight: FontWeight.w900,
+              ),
+              MyText(
+                paddingTop: 40,
                 text: 'Welcome! Do you wish to create an account',
                 size: 18,
-                weight: FontWeight.w900,
+                weight: FontWeight.w700,
               ),
               MyText(
                 text: 'Enter your email to login or sign up',
                 paddingTop: 10,
-                paddingBottom: Get.height * 0.035,
+                paddingBottom: Get.height * 0.020,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -83,34 +88,30 @@ class LoginSignUp extends GetView<LoginSignupController> {
                   },
                   text: 'Next'),
               const SizedBox(height: 5),
-              skipButton(),
+              Container(
+                height: 28,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: kBorderColor,
+                    width: 1,
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () => controller.guestLogin(),
+                  borderRadius: BorderRadius.circular(5),
+                  splashColor: kTertiaryColor.withOpacity(0.05),
+                  highlightColor: kTertiaryColor.withOpacity(0.05),
+                  child: Center(
+                    child: MyText(
+                      text: 'Skip',
+                      weight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
               Flexible(child: Container(), flex: 2),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget skipButton() {
-    return Container(
-      height: 28,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(
-          color: kBorderColor,
-          width: 1,
-        ),
-      ),
-      child: InkWell(
-        onTap: () => Get.toNamed(AppLinks.bottomNavBar),
-        borderRadius: BorderRadius.circular(5),
-        splashColor: kTertiaryColor.withOpacity(0.05),
-        highlightColor: kTertiaryColor.withOpacity(0.05),
-        child: Center(
-          child: MyText(
-            text: 'Skip',
-            weight: FontWeight.w700,
           ),
         ),
       ),

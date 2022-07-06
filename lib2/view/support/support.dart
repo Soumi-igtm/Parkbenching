@@ -55,6 +55,22 @@ class Support extends StatelessWidget {
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  MyText(
+                    paddingLeft: 10,
+                    text: 'Connect with us on',
+                    size: 16,
+                    weight: FontWeight.w500,
+                  ),
+                  Image.asset(
+                    'assets/images/world-wide-web.png',
+                    height: 20,
+                  ),
+                ],
+              ),
             ],
           ),
           Container(),

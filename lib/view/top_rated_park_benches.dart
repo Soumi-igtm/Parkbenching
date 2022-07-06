@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/top_rated_park_benches_controller.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/common.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/widget/custom_app_bar.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/controller/top_rated_park_benches_controller.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/constant/common.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/widget/custom_app_bar.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -61,6 +61,37 @@ class TopRatedParkBenches extends StatelessWidget {
                       builder: (context, bSnapshot) {
                         if (!bSnapshot.hasData) return const Center(child: CircularProgressIndicator());
                         List<DocumentSnapshot> benchData = bSnapshot.data!.docs;
+                        if (controller.currentIndex == 0) {
+                          benchData = benchData
+                              .where((element) =>
+                                  calculateDistance(
+                                      lat1: controller.userLatitude,
+                                      lon1: controller.userLongitude,
+                                      lat2: element["location"]["geopoint"].latitude,
+                                      lon2: element["location"]["geopoint"].longitude) <=
+                                  5000)
+                              .toList();
+                        } else if (controller.currentIndex == 1) {
+                          benchData = benchData
+                              .where((element) =>
+                                  calculateDistance(
+                                      lat1: controller.userLatitude,
+                                      lon1: controller.userLongitude,
+                                      lat2: element["location"]["geopoint"].latitude,
+                                      lon2: element["location"]["geopoint"].longitude) <=
+                                  10000)
+                              .toList();
+                        } else if (controller.currentIndex == 2) {
+                          benchData = benchData
+                              .where((element) =>
+                                  calculateDistance(
+                                      lat1: controller.userLatitude,
+                                      lon1: controller.userLongitude,
+                                      lat2: element["location"]["geopoint"].latitude,
+                                      lon2: element["location"]["geopoint"].longitude) <=
+                                  20000)
+                              .toList();
+                        }
                         return ListView.builder(
                             itemCount: benchData.length,
                             physics: const BouncingScrollPhysics(),
@@ -68,9 +99,11 @@ class TopRatedParkBenches extends StatelessWidget {
                             itemBuilder: (context, index) {
                               return BenchCards(
                                 bid: benchData[index].id,
-                                parkImage: benchData[index]["images"][0],
-                                parkName: benchData[index]["parkName"],
-                                rating: (benchData[index]["rating"] / benchData[index]["ratingCount"]).toDouble(),
+                                benchImage: benchData[index]["images"][0],
+                                benchName: benchData[index]["benchName"],
+                                rating: benchData[index]["ratingCount"] > 0
+                                    ? (benchData[index]["rating"] / benchData[index]["ratingCount"]).toDouble()
+                                    : 0.0,
                                 distance: meterIntoKm(calculateDistance(
                                     lat1: controller.userLatitude,
                                     lon1: controller.userLongitude,
@@ -143,14 +176,14 @@ class TopRatedParkBenches extends StatelessWidget {
 
 // ignore: must_be_immutable
 class BenchCards extends StatelessWidget {
-  String parkImage, parkName, bid, distance;
+  String benchImage, benchName, bid, distance;
   double rating;
   double lat, long, ulat, ulong;
   BenchCards({
     Key? key,
     required this.bid,
-    required this.parkImage,
-    required this.parkName,
+    required this.benchImage,
+    required this.benchName,
     required this.distance,
     required this.rating,
     required this.lat,
@@ -190,7 +223,7 @@ class BenchCards extends StatelessWidget {
                     topRight: Radius.circular(10),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl: parkImage,
+                    imageUrl: benchImage,
                     height: 78,
                     width: double.infinity,
                     fit: BoxFit.fill,
@@ -206,7 +239,7 @@ class BenchCards extends StatelessWidget {
                     children: [
                       MyText(
                         paddingBottom: 8,
-                        text: parkName,
+                        text: benchName,
                         size: 14,
                         maxLines: 1,
                         overFlow: TextOverflow.ellipsis,
@@ -332,7 +365,8 @@ class BenchCards extends StatelessWidget {
                                 ? Image.asset(
                                     kProfileIcon,
                                     height: 40,
-                                    fit: BoxFit.fitHeight,
+                                    width: 40,
+                                    fit: BoxFit.cover,
                                   )
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
@@ -340,6 +374,7 @@ class BenchCards extends StatelessWidget {
                                       imageUrl: uData["image"],
                                       placeholder: (context, s) => Image.asset(kProfileIcon),
                                       height: 40,
+                                      width: 40,
                                       fit: BoxFit.cover,
                                     ),
                                   ),

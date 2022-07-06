@@ -4,9 +4,9 @@ import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/widget/custom_app_bar.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/widget/custom_app_bar.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 
 import '../controller/report_park_bench_controller.dart';
 

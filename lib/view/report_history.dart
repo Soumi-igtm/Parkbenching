@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/widget/custom_app_bar.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/widget/custom_app_bar.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 import 'package:intl/intl.dart';
 import 'constant/common.dart';
 import 'constant/images.dart';
@@ -22,7 +22,7 @@ class _ReportHistoryState extends State<ReportHistory> {
     return Scaffold(
       appBar: CustomAppBar(title: "Report History"),
       body: StreamBuilder<QuerySnapshot>(
-          stream: reportsCollection.orderBy("reportDate", descending: true).snapshots(),
+          stream: reportsCollection.where("uid", isEqualTo: widget.uid).orderBy("reportDate", descending: true).snapshots(),
           builder: (context, rSnapshot) {
             if (!rSnapshot.hasData) return const Center(child: CircularProgressIndicator());
             List<DocumentSnapshot> repostList = rSnapshot.data!.docs;

@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:park_benching/controller/bottom_nav_controller.dart';
-import 'package:park_benching/resources/auth_methods.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/common.dart';
-import 'package:park_benching/view/widget/custom_app_bar.dart';
-import 'package:park_benching/view/widget/my_button.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
+import '../controller/bottom_nav_controller.dart';
+import '../resources/auth_methods.dart';
+import 'constant/color.dart';
+import 'constant/common.dart';
+import 'widget/custom_app_bar.dart';
+import 'widget/my_button.dart';
 
 import 'constant/images.dart';
 import 'constant/validators.dart';
@@ -169,7 +170,7 @@ class _ViewProfileState extends State<ViewProfile> {
                         Get.off(() => ViewProfile(uid: widget.uid));
                       }
                     },
-                    child: const Icon(Icons.check_circle, size: 18, color: kSecondaryColor),
+                    child: MyText(text: "Update", size: 12, color: kTertiaryColor),
                   ),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 )),

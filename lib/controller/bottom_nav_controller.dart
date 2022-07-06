@@ -9,7 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/view/constant/common.dart';
+import 'package:parkbenching/view/constant/common.dart';
 import 'package:rxdart/rxdart.dart';
 import '../view/bottom_nav_bar.dart';
 import '../view/constant/color.dart';
@@ -18,6 +18,7 @@ import '../view/widget/my_text.dart';
 
 class BottomNavController extends GetxController {
   String? uid = Get.parameters["uid"];
+  String? guest = Get.parameters["guest"];
 
   final box = GetStorage();
   late DocumentSnapshot userSnap;

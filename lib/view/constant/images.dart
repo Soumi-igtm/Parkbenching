@@ -26,3 +26,4 @@ const kRatingStar = 'assets/images/rating_star.png';
 const kDummyBench = 'assets/images/dummy_bench.png';
 const kCameraIcon = 'assets/images/camera.png';
 const kParkIcon = 'assets/images/park.png';
+const kSignOutIcon = 'assets/images/signout.png';

@@ -4,11 +4,10 @@ import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/widget/custom_app_bar.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/widget/custom_app_bar.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 import '../controller/add_bench_controller.dart';
 
 class AddBench extends GetView<AddBenchController> {
@@ -45,18 +44,32 @@ class AddBench extends GetView<AddBenchController> {
           ),
           Expanded(
             child: ListView(
+              padding: const EdgeInsets.only(top: 20),
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: ListTile(
-                    tileColor: kWhiteColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    title: Obx(()=>MyText(text: controller.selectedParkName.isEmpty ? "Select park" : controller.selectedParkName.value)),
-                    trailing: IconButton(
-                      onPressed: () => controller.openParkList(),
-                      icon: const Icon(Icons.keyboard_arrow_down),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: TextFormField(
+                    autofocus: false,
+                    controller: controller.benchNameController,
+                    keyboardType: TextInputType.text,
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      prefixIcon: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            kBenchIcon,
+                            width: 25,
+                          ),
+                        ],
+                      ),
+                      contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      hintText: "Bench Name (optional)",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
                 ),
@@ -369,23 +382,25 @@ class AddBench extends GetView<AddBenchController> {
                           ),
                           const SizedBox(height: 10),
                           TextFormField(
-                              autofocus: false,
-                              controller: controller.reviewController,
-                              keyboardType: TextInputType.text,
-                              maxLines: 3,
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.rate_review),
-                                contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                                hintText: "Describe your bench review",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              )),
+                            autofocus: false,
+                            controller: controller.reviewController,
+                            keyboardType: TextInputType.text,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.rate_review),
+                              contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                              hintText: "Describe your bench review",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
                       ElevatedButton(
-                        child: MyText(text: 'Submit', color: kWhiteColor, weight: FontWeight.bold, paddingTop: 15, paddingBottom: 15),
+                        child:
+                            MyText(text: 'Save location and Submit', color: kWhiteColor, weight: FontWeight.bold, paddingTop: 15, paddingBottom: 15),
                         style: ElevatedButton.styleFrom(primary: kSecondaryColor),
                         onPressed: () {
                           controller.submitBench(context);
@@ -439,34 +454,6 @@ class AddBench extends GetView<AddBenchController> {
             ),
             //image != null ? Image.file(image!) : Text("no image selected")
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget reportBrokenBench() {
-    return GestureDetector(
-      onTap: () => Get.toNamed(AppLinks.report),
-      child: Container(
-        margin: const EdgeInsets.only(
-          top: 10,
-        ),
-        height: 45,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: kSecondaryColor,
-            width: 1.0,
-          ),
-          color: kSecondaryColor.withOpacity(0.05),
-        ),
-        child: Center(
-          child: MyText(
-            text: 'Report broken bench',
-            size: 13,
-            weight: FontWeight.w700,
-            fontFamily: 'Mulish',
-          ),
         ),
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/splash_screen_controller.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/controller/splash_screen_controller.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 
 class SplashScreen extends GetView<SplashScreenController> {
   const SplashScreen({Key? key}) : super(key: key);

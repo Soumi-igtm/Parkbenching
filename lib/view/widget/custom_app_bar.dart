@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/view/constant/images.dart';
+import 'package:parkbenching/view/constant/images.dart';
 
 import 'my_text.dart';
 

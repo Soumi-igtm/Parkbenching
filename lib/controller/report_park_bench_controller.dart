@@ -11,8 +11,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/view/constant/color.dart';
+import 'package:parkbenching/routes/routes.dart';
+import 'package:parkbenching/view/constant/color.dart';
 
 import '../view/constant/common.dart';
 import '../view/constant/images.dart';

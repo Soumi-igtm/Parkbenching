@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/controller/park_controller.dart';
-import 'package:park_benching/routes/routes.dart';
+import 'package:parkbenching/controller/park_controller.dart';
+import 'package:parkbenching/routes/routes.dart';
+import 'package:parkbenching/view/all_benches.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'constant/color.dart';
 import 'constant/common.dart';
@@ -60,8 +61,8 @@ class Parks extends StatelessWidget {
                                       lat1: controller.userLatitude,
                                       lon1: controller.userLongitude,
                                       lat2: element["parkLocation"].latitude,
-                                      lon2: element["parkLocation"].longitude) >
-                                  5)
+                                      lon2: element["parkLocation"].longitude) <=
+                                  5000)
                               .toList();
                         }
 
@@ -71,6 +72,7 @@ class Parks extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           itemBuilder: (BuildContext context, int index) {
                             return ParkCards(
+                              parkID: parkList[index].id,
                               parkImage: parkList[index]["images"][0],
                               parkName: parkList[index]["parkName"],
                               city: parkList[index]["city"],
@@ -148,11 +150,12 @@ class Parks extends StatelessWidget {
 
 // ignore: must_be_immutable
 class ParkCards extends StatelessWidget {
-  String parkImage, parkName, city, state;
+  String parkID, parkImage, parkName, city, state;
   String distance;
   double lat, long, ulat, ulong;
   ParkCards({
     Key? key,
+    required this.parkID,
     required this.parkImage,
     required this.parkName,
     required this.distance,
@@ -258,11 +261,14 @@ class ParkCards extends StatelessWidget {
                     ),
                   ),
                 ),
-                MyText(
-                  text: 'All Benches',
-                  size: 14,
-                  weight: FontWeight.w500,
-                  color: kYellowColor,
+                GestureDetector(
+                  onTap: () => Get.toNamed("/all_benches", parameters: {"parkID": parkID, "parkName": parkName}),
+                  child: MyText(
+                    text: 'All Benches',
+                    size: 14,
+                    weight: FontWeight.w500,
+                    color: kYellowColor,
+                  ),
                 )
               ],
             ),

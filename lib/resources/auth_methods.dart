@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/view/constant/common.dart';
+import 'package:parkbenching/routes/routes.dart';
+import 'package:parkbenching/view/constant/common.dart';
 
 class AuthMethods {
   static AuthMethods instance = AuthMethods();
@@ -63,5 +63,10 @@ class AuthMethods {
   Future<bool> updateField({required String uid, required String key, required String value}) async {
     await usersCollection.doc(uid).update({key: value});
     return true;
+  }
+
+  void signOut() async {
+    FirebaseAuth.instance.signOut();
+    Get.offAllNamed(AppLinks.loginSignUp);
   }
 }

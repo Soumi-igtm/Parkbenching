@@ -19,8 +19,4 @@ class ParkBenchController extends GetxController {
     userLongitude = userLocation["longitude"];
     super.onInit();
   }
-
-
-
-
 }

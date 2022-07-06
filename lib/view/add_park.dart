@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 import 'constant/color.dart';
 import 'widget/custom_app_bar.dart';
 
@@ -199,7 +199,7 @@ class AddPark extends GetView<AddParkController> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: ElevatedButton(
-                    child: MyText(text: 'Add for review', color: kWhiteColor, weight: FontWeight.bold, paddingTop: 15, paddingBottom: 15),
+                    child: MyText(text: 'Submit and Send for review', color: kWhiteColor, weight: FontWeight.bold, paddingTop: 15, paddingBottom: 15),
                     style: ElevatedButton.styleFrom(primary: kSecondaryColor),
                     onPressed: () {
                       controller.submitPark(context);

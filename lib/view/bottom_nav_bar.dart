@@ -2,11 +2,11 @@ import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:park_benching/routes/routes.dart';
-import 'package:park_benching/view/constant/color.dart';
-import 'package:park_benching/view/constant/images.dart';
-import 'package:park_benching/view/drawer/custom_drawer.dart';
-import 'package:park_benching/view/widget/my_text.dart';
+import 'package:parkbenching/routes/routes.dart';
+import 'package:parkbenching/view/constant/color.dart';
+import 'package:parkbenching/view/constant/images.dart';
+import 'package:parkbenching/view/drawer/custom_drawer.dart';
+import 'package:parkbenching/view/widget/my_text.dart';
 
 import '../controller/bottom_nav_controller.dart';
 
@@ -108,12 +108,12 @@ class BottomNavBar extends StatelessWidget {
                   ),
                   BottomNavigationBarItem(
                     icon: CustomBottomNavBarItem(
-                      onTap: () => Get.toNamed(AppLinks.parks, parameters: {"uid": controller.uid!}),
+                      onTap: () => Get.toNamed(AppLinks.sendLocation),
                       index: 1,
-                      icon: kParkIcon,
+                      icon: kSendIcon,
                       iconSize: 20,
                     ),
-                    label: 'Parks',
+                    label: 'Send',
                   ),
                   BottomNavigationBarItem(
                     icon: CustomBottomNavBarItem(

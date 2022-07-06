@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:park_benching/view/constant/color.dart';
+import 'package:parkbenching/view/constant/color.dart';
 
 // ignore: must_be_immutable
 class MyText extends StatelessWidget {
